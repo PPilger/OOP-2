@@ -19,6 +19,7 @@ public abstract class Termin {
 	public Termin(Termin other) {
 		this.ort = other.ort;
 		this.zeitraum = other.zeitraum;
+		this.stack = new Stack<Termin>();
 	}
 	
 	private String ort;
