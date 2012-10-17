@@ -10,6 +10,10 @@ import java.util.List;
  */
 public class Zeitraum {
 	List<Date> zeitpunkte;
+	
+	public void add(Date zeitpunkt) {
+		zeitpunkte.add(zeitpunkt);
+	}
 
 	public boolean inZeitraum(Date zeitpunkt) {
 		if (zeitpunkte.isEmpty()) {
