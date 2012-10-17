@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * 
@@ -28,24 +28,24 @@ public class Band {
 		return this.repertoire;
 	}
 
-	public Songs getRepertoire(List<Selektor<Song>> selectors) {
-		return new Songs(repertoire, selectors);
+	public Songs getRepertoire(Selektor<Song>... selectors) {
+		return new Songs(repertoire, Arrays.asList(selectors));
 	}
 
 	public Termine getTermine() {
 		return this.termine;
 	}
 
-	public Termine getTermine(List<Selektor<Termin>> selectors) {
-		return new Termine(termine, selectors);
+	public Termine getTermine(Selektor<Termin>... selectors) {
+		return new Termine(termine, Arrays.asList(selectors));
 	}
 
 	public Mitglieder getMitglieder() {
 		return this.mitglieder;
 	}
 
-	public Mitglieder getMitglieder(List<Selektor<Mitglied>> selectors) {
-		return new Mitglieder(mitglieder, selectors);
+	public Mitglieder getMitglieder(Selektor<Mitglied>... selectors) {
+		return new Mitglieder(mitglieder, Arrays.asList(selectors));
 	}
 
 	public String toString() {
