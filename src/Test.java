@@ -5,8 +5,10 @@ import java.io.ObjectOutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Test {
 	private static Calendar kalender = Calendar.getInstance();
@@ -23,48 +25,37 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		try {
-			PipedInputStream pis = new PipedInputStream();
-			PipedOutputStream pos = new PipedOutputStream(pis);
-			//pis.connect(pos);
-			ObjectOutputStream oos = new ObjectOutputStream(pos);
-			ObjectInputStream ois = new ObjectInputStream(pis);
-			
-			Band band = new Band("Green Day", "Rock");
-			  
-			Zeitraum zeitraum = new Zeitraum(toDate(1989, 3, 4));
-			Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
-					"Gitarre", zeitraum);
-			band.getMitglieder().add(mitglied);
-			System.out.println("+ " + mitglied.toDetailString());
+		Programm prog = new Programm();
+		
+		//prog.addBand(new Band("Green Day", "Rock"));
+		Band band = prog.getBand("Green Day");
+		System.out.println(band);
+		System.out.println(band.getMitglieder());
+		  
+		/*Zeitraum zeitraum = new Zeitraum(toDate(1989, 3, 4));
+		Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
+				"Gitarre", zeitraum);
+		band.getMitglieder().add(mitglied);
+		System.out.println("+ " + mitglied.toDetailString());
 
-			zeitraum = new Zeitraum(toDate(1989, 3, 4));
-			mitglied = new Mitglied("Mike Dirnt", "321/12323", "Bass", zeitraum);
-			band.getMitglieder().add(mitglied);
-			System.out.println("+ " + mitglied.toDetailString());
+		zeitraum = new Zeitraum(toDate(1989, 3, 4));
+		mitglied = new Mitglied("Mike Dirnt", "321/12323", "Bass", zeitraum);
+		band.getMitglieder().add(mitglied);
+		System.out.println("+ " + mitglied.toDetailString());
 
-			zeitraum = new Zeitraum(toDate(1989, 3, 4), toDate(1990, 1, 1));
-			mitglied = new Mitglied("Al Sobrante", "345/54327", "Schlagzeug",
-					zeitraum);
-			band.getMitglieder().add(mitglied);
-			System.out.println("+ " + mitglied.toDetailString());
+		zeitraum = new Zeitraum(toDate(1989, 3, 4), toDate(1990, 1, 1));
+		mitglied = new Mitglied("Al Sobrante", "345/54327", "Schlagzeug",
+				zeitraum);
+		band.getMitglieder().add(mitglied);
+		System.out.println("+ " + mitglied.toDetailString());
 
-			zeitraum = new Zeitraum(toDate(1990, 1, 1));
-			mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug",
-					zeitraum);
-			band.getMitglieder().add(mitglied);
-			System.out.println("+ " + mitglied.toDetailString());
-			
-			oos.writeObject(band.getMitglieder());
-			
-			System.out.println(ois.readObject().toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		zeitraum = new Zeitraum(toDate(1990, 1, 1));
+		mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug",
+				zeitraum);
+		band.getMitglieder().add(mitglied);
+		System.out.println("+ " + mitglied.toDetailString());*/
+		
+		prog.quit();
 		
 		/*
 		 * System.out.println("Teste Band"); System.out.println(); testeBand();

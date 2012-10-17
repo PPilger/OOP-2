@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -82,5 +83,37 @@ public class Songs implements Serializable {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append('[');
+		
+		Iterator<Song> iter = songs.iterator();
+		while(iter.hasNext()) {
+			Song song = iter.next();
+			if (select(song)) {
+				builder.append(song);
+				break;
+			}
+		}
+		while (iter.hasNext()) {
+			Song song = iter.next();
+			if (select(song)) {
+				builder.append(", ");
+				builder.append(song);
+			}
+		}
+		
+		builder.append(']');
+		
+		return builder.toString();
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		selectors = new ArrayList<Selektor<Song>>();
 	}
 }

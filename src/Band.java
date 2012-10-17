@@ -1,15 +1,18 @@
-import java.util.Arrays;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 
  * @author Christian Kletzander
  * 
  */
-public class Band {
-
+public class Band implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	// Variablendefinition
 	private String name;
 	private String ausrichtung;
+
 	private Songs repertoire;
 	private Termine termine;
 	private Mitglieder mitglieder;
@@ -23,29 +26,33 @@ public class Band {
 		this.termine = new Termine();
 		this.mitglieder = new Mitglieder();
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	public Songs getRepertoire() {
 		return this.repertoire;
 	}
 
-	public Songs getRepertoire(Selektor<Song>... selectors) {
-		return new Songs(repertoire, Arrays.asList(selectors));
+	public Songs getRepertoire(List<Selektor<Song>> selectors) {
+		return new Songs(repertoire, selectors);
 	}
 
 	public Termine getTermine() {
 		return this.termine;
 	}
 
-	public Termine getTermine(Selektor<Termin>... selectors) {
-		return new Termine(termine, Arrays.asList(selectors));
+	public Termine getTermine(List<Selektor<Termin>> selectors) {
+		return new Termine(termine, selectors);
 	}
 
 	public Mitglieder getMitglieder() {
 		return this.mitglieder;
 	}
 
-	public Mitglieder getMitglieder(Selektor<Mitglied>... selectors) {
-		return new Mitglieder(mitglieder, Arrays.asList(selectors));
+	public Mitglieder getMitglieder(List<Selektor<Mitglied>> selectors) {
+		return new Mitglieder(mitglieder, selectors);
 	}
 
 	public String toString() {

@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,9 +10,11 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Termine {
-	List<Termin> termine;
-	List<Selektor<Termin>> selectors;
+public class Termine implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	private List<Termin> termine;
+	private transient List<Selektor<Termin>> selectors;
 
 	public Termine() {
 		this.termine = new ArrayList<Termin>();
@@ -115,5 +119,37 @@ public class Termine {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append('[');
+		
+		Iterator<Termin> iter = termine.iterator();
+		while(iter.hasNext()) {
+			Termin termin = iter.next();
+			if (select(termin)) {
+				builder.append(termin);
+				break;
+			}
+		}
+		while (iter.hasNext()) {
+			Termin termin = iter.next();
+			if (select(termin)) {
+				builder.append(", ");
+				builder.append(termin);
+			}
+		}
+		
+		builder.append(']');
+		
+		return builder.toString();
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		selectors = new ArrayList<Selektor<Termin>>();
 	}
 }

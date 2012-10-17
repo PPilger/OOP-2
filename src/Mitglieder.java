@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,8 +13,8 @@ import java.util.List;
 public class Mitglieder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	List<Mitglied> mitglieder;
-	List<Selektor<Mitglied>> selectors;
+	private List<Mitglied> mitglieder;
+	private transient List<Selektor<Mitglied>> selectors;
 
 	public Mitglieder() {
 		this.mitglieder = new ArrayList<Mitglied>();
@@ -84,6 +85,7 @@ public class Mitglieder implements Serializable {
 		return true;
 	}
 	
+	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		
@@ -108,5 +110,10 @@ public class Mitglieder implements Serializable {
 		builder.append(']');
 		
 		return builder.toString();
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		selectors = new ArrayList<Selektor<Mitglied>>();
 	}
 }
