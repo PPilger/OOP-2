@@ -3,23 +3,22 @@ import java.util.ArrayList;
 
 public class Ort {
 
-	private String name;
-	private String adresse;
+	private String bezeichnung;
 	private ArrayList<String> infrastruktur;
 	
 	public String toString()
 	{
-		return name;
+		return bezeichnung;
 	}
 	
 	public String toDetailString()
 	{
-		return "Name: " + name + " Adresse: " + adresse + infrastruktur.toString();
+		return "Bezeichnung: " + bezeichnung + infrastruktur.toString();
 	}
 		
-	public Ort(String name, String adresse, ArrayList<String> infrastruktur)
+	public Ort(String bezeichnung, ArrayList<String> infrastruktur)
 	{
-		this.name = name; this.adresse = adresse; this.infrastruktur = infrastruktur;
+		this.bezeichnung = bezeichnung; this.infrastruktur = infrastruktur;
 	}
 	
 	/**
@@ -27,47 +26,28 @@ public class Ort {
 	 * @author Koegler Alexander
 	 *
 	 */
-	public static class NameSelektor implements Selektor<Ort>{
-
-		private String name;
-		public NameSelektor(String name)
-		{
-			this.name = name;
-		}
-		@Override
-		public boolean select(Ort item) {
-			return item.name.equalsIgnoreCase(name);
-		}
-	}
-	
-	/**
-	 * 
-	 * @author Koegler Alexander
-	 *
-	 */
-	public static class AdresseSelektor implements Selektor<Ort>{
+	public static class BezeichnungSelektor implements Selektor<Ort>{
 
 		private String name;
 		private boolean enthaelt;
+		
 		/**
-		 * Stellt den Selektor so ein, dass Elemente erfolgreich verglichen werden, wenn die Adresse einander eins zu eins gleichen
-		 * @param adresse die zu pruefende Adresse
+		 * Stellt den Selektor so ein, dass Elemente erfolgreich verglichen werden, wenn die bezeichnung einander eins zu eins gleichen
+		 * @param bezeichnung die zu pruefende bezeichnung
 		 */
-		public AdresseSelektor(String adresse)
+		public BezeichnungSelektor(String bezeichnung)
 		{
-			this.name = adresse;
-			this.enthaelt = false;
+			this.name = bezeichnung; enthaelt = false;
 		}
 		
 		/**
-		 * Stellt den Selektor so ein, dass Elemente erfolgreich verglichen werden, sobald die Adresse den im Parameter angegeben String enthaelt
-		 * @param adresse die zu pruefende Adresse
-		 * @param okIfContains Wenn True so wird nur darauf geachtet das die Adresse enthalten ist, bei False muessen die Adressen komplett gleich sein. 
+		 * Stellt den Selektor so ein, dass Elemente erfolgreich verglichen werden, sobald die bezeichnung den im Parameter angegeben String enthaelt
+		 * @param bezeichnung die zu pruefende bezeichnung
+		 * @param okIfContains Wenn True so wird nur darauf geachtet das die bezeichnung enthalten ist, bei False muessen die bezeichnungn komplett gleich sein. 
 		 */
-		public AdresseSelektor(String adresse, boolean okIfContains)
+		public BezeichnungSelektor(String bezeichnung, boolean okIfContains)
 		{
-			this.name = adresse;
-			this.enthaelt = okIfContains;
+			this.name = bezeichnung; this.enthaelt = okIfContains;			
 		}
 		
 		@Override
@@ -75,13 +55,37 @@ public class Ort {
 			if(enthaelt)
 			{
 				//kommt der String nicht vor, wird -1 zurückgegeben
-				return item.adresse.indexOf(name) != -1;
+				return item.bezeichnung.indexOf(name) != -1;
 			}else
 			{
-				return item.adresse.equalsIgnoreCase(name);
+				return item.bezeichnung.equalsIgnoreCase(name);
 			}
-		}		
+		}	
 	}
+
 	
-	//TODO: infrastruktur Selektor
+	public static class InfrastrukturSelektor implements Selektor<Ort>
+	{
+		private String name;
+		
+		public InfrastrukturSelektor(String einrichtung){
+			this.name = einrichtung;
+		}
+
+		@Override
+		/**
+		 * ueberprueft ob die Liste der infrastrukuren ein element mit der selben bezeichnung enthaelt
+		 */
+		public boolean select(Ort item) {
+			for(String str : item.infrastruktur)
+			{
+				if(str.equalsIgnoreCase(name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+	}
 }
