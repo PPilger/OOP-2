@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Songs {
+public class Songs implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	List<Song> songs;
 	List<Selektor<Song>> selectors;
 

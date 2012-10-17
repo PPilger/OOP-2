@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +11,11 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Zeitraum {
-	List<Date> zeitpunkte = new ArrayList<Date>();
+public class Zeitraum implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
+	List<Date> zeitpunkte = new ArrayList<Date>();
+
 	public void add(Date zeitpunkt) {
 		zeitpunkte.add(zeitpunkt);
 	}
@@ -47,7 +51,8 @@ public class Zeitraum {
 			return false; // etwas beschraenktes kann nicht alles enthalten
 		}
 
-		//Es muessen alle Intervalle von other in einem Intervall von this enthalten sein
+		// Es muessen alle Intervalle von other in einem Intervall von this
+		// enthalten sein
 		for (int i = 0; i < other.zeitpunkte.size() - 1; i += 2) {
 			Date von = other.zeitpunkte.get(i);
 			Date bis = other.zeitpunkte.get(i + 1);
@@ -57,7 +62,7 @@ public class Zeitraum {
 			}
 		}
 
-		//Ueberpruefung des offenen Endintervalls
+		// Ueberpruefung des offenen Endintervalls
 		if ((other.zeitpunkte.size() & 0x1) == 1) {
 			Date von = other.zeitpunkte.get(other.zeitpunkte.size() - 1);
 			return enthaelt(von);
@@ -75,12 +80,12 @@ public class Zeitraum {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append('[');
-		
+
 		// Ausgabe des ersten Intervalls
 		if (0 < zeitpunkte.size() - 1) {
 			Date von = zeitpunkte.get(0);
 			Date bis = zeitpunkte.get(1);
-			
+
 			builder.append(format.format(von));
 			builder.append(" - ");
 			builder.append(format.format(bis));
@@ -102,10 +107,10 @@ public class Zeitraum {
 			Date von = zeitpunkte.get(zeitpunkte.size() - 1);
 
 			// ", " nur anhaengen, wenn es Intervalle davor gibt.
-			if(zeitpunkte.size() > 1) {
+			if (zeitpunkte.size() > 1) {
 				builder.append(", ");
 			}
-			
+
 			builder.append(format.format(von));
 			builder.append(" - ");
 		}
@@ -161,4 +166,14 @@ public class Zeitraum {
 
 		return false;
 	}
+
+	/*private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+		out.writeObject(zeitpunkte);
+		out.close();
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		zeitpunkte = (List<Date>) in.readObject();
+	}*/
 }
