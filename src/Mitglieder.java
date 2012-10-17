@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Eine Sammlung von Mitgliedern.
@@ -7,28 +8,76 @@ import java.util.Date;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Mitglieder extends ArrayList<Mitglied> {
+public class Mitglieder {
+	List<Mitglied> mitglieder;
+	List<Selektor<Mitglied>> selectors;
+
+	public Mitglieder() {
+		this.mitglieder = new ArrayList<Mitglied>();
+		this.selectors = new ArrayList<Selektor<Mitglied>>();
+	}
 
 	/**
-	 * Serialisierungs ID
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Gibt die Mitglieder zurueck, die zu dem Zeitpunkt <code>zeitpunkt</code> bei der Band waren.
+	 * Erstelle eine neue Mitglieder Sammlung die auf den selben Daten wie
+	 * <code>base</code> arbeitet. Es sind jedoch nur Elemente sichtbar, die von
+	 * den Selektoren selektiert werden.
 	 * 
-	 * @param zeitpunkt
-	 * @return
+	 * @param base
+	 * @param selectors
 	 */
-	public Mitglieder list(Date zeitpunkt) {
-		Mitglieder ausgabe = new Mitglieder();
+	public Mitglieder(Mitglieder base, List<Selektor<Mitglied>> selectors) {
+		this.mitglieder = base.mitglieder;
+		this.selectors = selectors;
+	}
 
-		for (Mitglied element : this) {
-			if (element.getZeitraum().inZeitraum(zeitpunkt)) {
-				ausgabe.add(element);
+	/**
+	 * Fuegt eine neues Mitglied hinzu, wenn dieser von den Selektoren selektiert
+	 * werden kann. Kann er nicht selektiert werden, wird er nicht hinzugefuegt
+	 * und false zurueckgegeben.
+	 * 
+	 * @param mitglied
+	 *            das neue Mitglied
+	 * @return true wenn das Mitglied hinzugefuegt wurde, false anderenfalls.
+	 */
+	public boolean add(Mitglied mitglied) {
+		if (select(mitglied)) {
+			return mitglieder.add(mitglied);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Entfernt alle selektierten Mitglieder.
+	 * 
+	 * @return die Anzahl der entfernten Mitglieder
+	 */
+	public int remove() {
+		int removed = 0;
+
+		Iterator<Mitglied> iter = mitglieder.iterator();
+		while (iter.hasNext()) {
+			Mitglied mitglied = iter.next();
+			if (select(mitglied)) {
+				iter.remove();
+				removed++;
 			}
 		}
 
-		return ausgabe;
+		return removed;
+	}
+
+	/**
+	 * @param mitglied
+	 * @return true, wenn alle Selektoren das Mitglied selektieren, false
+	 *         anderenfalls.
+	 */
+	private boolean select(Mitglied mitglied) {
+		for (Selektor<Mitglied> selector : selectors) {
+			if (!selector.select(mitglied)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

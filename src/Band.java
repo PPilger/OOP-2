@@ -1,4 +1,4 @@
-import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -28,32 +28,27 @@ public class Band {
 		return this.repertoire;
 	}
 
-	public Songs getRepertoire(Date zeitpunkt) {
-		return this.repertoire.list(zeitpunkt);
+	public Songs getRepertoire(List<Selektor<Song>> selectors) {
+		return new Songs(repertoire, selectors);
 	}
 
 	public Termine getTermine() {
 		return this.termine;
 	}
 
-	public Termine getTermine(Zeitraum zeitraum) {
-		return this.termine.list(zeitraum);
-	}
-
-	public Termine getTermine(Class<? extends Termin> typ, Zeitraum zeitraum) {
-		return this.termine.list(typ, zeitraum);
+	public Termine getTermine(List<Selektor<Termin>> selectors) {
+		return new Termine(termine, selectors);
 	}
 
 	public Mitglieder getMitglieder() {
 		return this.mitglieder;
 	}
 
-	public Mitglieder getMitglieder(Date zeitpunkt) {
-		return this.mitglieder.list(zeitpunkt);
+	public Mitglieder getMitglieder(List<Selektor<Mitglied>> selectors) {
+		return new Mitglieder(mitglieder, selectors);
 	}
 
 	public String toString() {
 		return this.name + ", " + this.ausrichtung;
 	}
-
 }
