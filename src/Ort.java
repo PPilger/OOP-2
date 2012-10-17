@@ -63,5 +63,29 @@ public class Ort {
 		}	
 	}
 
-	//TODO: infrastruktur Selektor
+	
+	public static class InfrastrukturSelektor implements Selektor<Ort>
+	{
+		private String name;
+		
+		public InfrastrukturSelektor(String einrichtung){
+			this.name = einrichtung;
+		}
+
+		@Override
+		/**
+		 * ueberprueft ob die Liste der infrastrukuren ein element mit der selben bezeichnung enthaelt
+		 */
+		public boolean select(Ort item) {
+			for(String str : item.infrastruktur)
+			{
+				if(str.equalsIgnoreCase(name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+	}
 }
