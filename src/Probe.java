@@ -1,10 +1,17 @@
+import java.io.Serializable;
+
 /**
  * Speichert die probenspezifischen Eigenschaften eines Termins ab.
  * 
  * @author Koegler Alexander
  * 
  */
-public class Probe extends Termin {
+public class Probe extends Termin implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 
@@ -58,7 +65,7 @@ public class Probe extends Termin {
 	}
 	
 	public void setRaummiete(double raummiete) {
-		this.save(this.duplikat());
+		this.save();
 		this.raummiete = raummiete;
 	}
 	

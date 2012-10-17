@@ -1,11 +1,17 @@
+import java.io.Serializable;
+
 /**
  * Speichert die auftrittspezifischen Eigenschaften eines Termins.
  * 
  * @author Koegler Alexander
  * 
  */
-public class Auftritt extends Termin {
+public class Auftritt extends Termin implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private double gage;
 
 	/**
@@ -58,7 +64,7 @@ public class Auftritt extends Termin {
 	}
 	
 	public void setGage(double gage) {
-		this.save(this.duplikat());
+		this.save();
 		this.gage = gage;
 	}
 

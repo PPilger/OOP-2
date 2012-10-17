@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Stack;
 
@@ -8,7 +9,12 @@ import java.util.Stack;
  * @author Koegler Alexander
  * 
  */
-public abstract class Termin {
+public abstract class Termin implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Termin(String ort, Zeitraum zeitraum) {
 		this.ort = ort;
@@ -65,8 +71,8 @@ public abstract class Termin {
 	 * @param t
 	 *            Termin der verŠndert wird
 	 */
-	public void save(Termin t) {
-		stack.push(t);
+	public void save() {
+		stack.push(this.duplikat());
 	}
 	
 	/**
@@ -75,7 +81,7 @@ public abstract class Termin {
 	 * 		†berspeichern des Ortes
 	 */
 	public void setOrt(String ort) {
-		stack.push(this);
+		this.save();
 		this.ort = ort;
 	}
 	
@@ -85,12 +91,13 @@ public abstract class Termin {
 	 * 		†berspeichern des Zeitraums
 	 */
 	public void setZeitraum(Zeitraum zeitraum) {
-		stack.push(this);
+		this.save();
 		this.zeitraum = zeitraum;
 	}
 
 	public abstract String toDetailString();
-
+	public abstract Termin duplikat();
+	
 	/**
 	 * 
 	 * @author Christian Kletzander
