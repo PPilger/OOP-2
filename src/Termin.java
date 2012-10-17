@@ -13,7 +13,7 @@ public abstract class Termin {
 	public Termin(String ort, Zeitraum zeitraum) {
 		this.ort = ort;
 		this.zeitraum = zeitraum;
-		stack = new Stack<Termin>();
+		this.stack = new Stack<Termin>();
 	}
 	
 	public Termin(Termin other) {
@@ -24,7 +24,7 @@ public abstract class Termin {
 	
 	private String ort;
 	private Zeitraum zeitraum;
-	Stack<Termin> stack;
+	private Stack<Termin> stack;
 
 	/**
 	 * 

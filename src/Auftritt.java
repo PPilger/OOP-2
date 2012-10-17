@@ -58,7 +58,7 @@ public class Auftritt extends Termin {
 	}
 	
 	public void setGage(double gage) {
-		stack.push(this.duplikat());
+		this.save(this.duplikat());
 		this.gage = gage;
 	}
 

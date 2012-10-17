@@ -58,7 +58,7 @@ public class Probe extends Termin {
 	}
 	
 	public void setRaummiete(double raummiete) {
-		stack.push(this.duplikat());
+		this.save(this.duplikat());
 		this.raummiete = raummiete;
 	}
 	
