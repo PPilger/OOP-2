@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * 
  * @author Christian Kletzander
@@ -31,5 +33,60 @@ public class Mitglied {
 	public String toDetailString() {
 		return toString() + " " + this.zeitraum + "\n" + "TelefonNr: "
 				+ this.telNr;
+	}
+	
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class ZeitraumSelektor implements Selektor<Mitglied>
+	{
+		private Date zeitpunkt;
+		public ZeitraumSelektor(Date zeitpunkt)
+		{
+			this.zeitpunkt = zeitpunkt;
+		}
+		@Override
+		public boolean select(Mitglied item) {
+			return item.getZeitraum().inZeitraum(zeitpunkt);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class InstrumentSelektor implements Selektor<Mitglied>
+	{
+		private String instrument;
+		public InstrumentSelektor(String instrument)
+		{
+			this.instrument = instrument;
+		}
+		@Override
+		public boolean select(Mitglied item) {
+			return item.instrument.compareToIgnoreCase(instrument) == 0;
+		}
+	}
+	
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class NameSelektor implements Selektor<Mitglied>{
+
+		private String name;
+		public NameSelektor(String name)
+		{
+			this.name = name;
+		}
+		@Override
+		public boolean select(Mitglied item) {
+			return item.name.compareToIgnoreCase(name) == 0;
+		}
 	}
 }

@@ -1,3 +1,5 @@
+import java.util.Date;
+
 
 /**
  * 
@@ -28,5 +30,85 @@ public class Song {
 
 	public String toDetailString() {
 		return toString() + " " + this.zeitraum;
+	}
+	
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class ZeitpunktSelektor implements Selektor<Song>
+	{
+		private Date zeitpunkt;
+		public ZeitpunktSelektor(Date zeitpunkt)
+		{
+			this.zeitpunkt = zeitpunkt;
+		}
+		@Override
+		public boolean select(Song item) {
+			return item.getZeitraum().inZeitraum(zeitpunkt);
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class NameSelektor implements Selektor<Song>{
+
+		private String name;
+		public NameSelektor(String name)
+		{
+			this.name = name;
+		}
+		@Override
+		public boolean select(Song item) {
+			return item.name.compareToIgnoreCase(name) == 0;
+		}
+	}
+
+	/**
+	 * 
+	 * @author Kögler Alexander
+	 *
+	 */
+	public static class LaengeSelektor implements Selektor<Song>{
+
+		private int min, max;
+		
+		/**
+		 * Selektor, der sicher stellt, dass beide Parameter passen in bezug auf die Länge des Musikstückes
+		 * @param min Musikstück muss mindesten so lange dauern, alternativ -inf angeben
+		 * @param max Musikstück darf maximal solange dauern, alternativ +inf angeben
+		 */
+		public LaengeSelektor(int min, int max)
+		{
+			this.min = min;
+			this.max = max;					
+		}
+		
+		/**
+		 * Selektor der sicherstellt, dass das Musikstück genau so lange ist
+		 * @param equalTo Dauer des Musikstücks muss genau solange sein wie der Parameter
+		 */
+		public LaengeSelektor(int equalTo)
+		{
+			this(equalTo, equalTo);
+		}
+		
+		@Override
+		public boolean select(Song item) {
+			if(min == max)
+			{
+				return item.laenge == min;
+			}
+			else
+			{
+				return min <= item.laenge && item.laenge<= max;
+			}
+		}
+		
 	}
 }
