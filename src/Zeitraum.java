@@ -1,7 +1,7 @@
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +15,13 @@ public class Zeitraum implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	List<Date> zeitpunkte = new ArrayList<Date>();
+
+	public Zeitraum() {
+	}
+	
+	public Zeitraum(Date... zeitpunkte) {
+		this.zeitpunkte.addAll(Arrays.asList(zeitpunkte));
+	}
 
 	public void add(Date zeitpunkt) {
 		zeitpunkte.add(zeitpunkt);

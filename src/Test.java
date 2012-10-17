@@ -30,16 +30,32 @@ public class Test {
 			ObjectOutputStream oos = new ObjectOutputStream(pos);
 			ObjectInputStream ois = new ObjectInputStream(pis);
 			
-			oos.writeObject(new Serializable() {
-				private static final long serialVersionUID = 1L;
-				
-				public int num = 12;
-				private String str = "hallo";
-				
-				public String toString() {
-					return num + ": " + str;
-				}
-			});
+			Band band = new Band("Green Day", "Rock");
+			  
+			Zeitraum zeitraum = new Zeitraum(toDate(1989, 3, 4));
+			Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
+					"Gitarre", zeitraum);
+			band.getMitglieder().add(mitglied);
+			System.out.println("+ " + mitglied.toDetailString());
+
+			zeitraum = new Zeitraum(toDate(1989, 3, 4));
+			mitglied = new Mitglied("Mike Dirnt", "321/12323", "Bass", zeitraum);
+			band.getMitglieder().add(mitglied);
+			System.out.println("+ " + mitglied.toDetailString());
+
+			zeitraum = new Zeitraum(toDate(1989, 3, 4), toDate(1990, 1, 1));
+			mitglied = new Mitglied("Al Sobrante", "345/54327", "Schlagzeug",
+					zeitraum);
+			band.getMitglieder().add(mitglied);
+			System.out.println("+ " + mitglied.toDetailString());
+
+			zeitraum = new Zeitraum(toDate(1990, 1, 1));
+			mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug",
+					zeitraum);
+			band.getMitglieder().add(mitglied);
+			System.out.println("+ " + mitglied.toDetailString());
+			
+			oos.writeObject(band.getMitglieder());
 			
 			System.out.println(ois.readObject().toString());
 		} catch (IOException e) {

@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Mitglieder {
+public class Mitglieder implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	List<Mitglied> mitglieder;
 	List<Selektor<Mitglied>> selectors;
 
@@ -79,5 +82,31 @@ public class Mitglieder {
 			}
 		}
 		return true;
+	}
+	
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append('[');
+		
+		Iterator<Mitglied> iter = mitglieder.iterator();
+		while(iter.hasNext()) {
+			Mitglied mitglied = iter.next();
+			if (select(mitglied)) {
+				builder.append(mitglied);
+				break;
+			}
+		}
+		while (iter.hasNext()) {
+			Mitglied mitglied = iter.next();
+			if (select(mitglied)) {
+				builder.append(", ");
+				builder.append(mitglied);
+			}
+		}
+		
+		builder.append(']');
+		
+		return builder.toString();
 	}
 }
