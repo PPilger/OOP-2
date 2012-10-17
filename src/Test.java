@@ -38,13 +38,13 @@ public class Test {
 	}
 
 	private static void testeBand() {
-		Band band = new Band("Green Day", "Rock");
+		/*Band band = new Band("Green Day", "Rock");
 		System.out.println(band);
-		System.out.println();
+		System.out.println();*/
 	}
 
 	private static void testeTermine() {
-		Termin termin;
+		/*Termin termin;
 		ZeitIntervall zeitIntervall;
 		Band band = new Band("Green Day", "Rock");
 
@@ -128,11 +128,11 @@ public class Test {
 		System.out.println(band.getTermine());
 		System.out.println("Gewinn: " + band.getTermine().getGewinn());
 		System.out.println("Kosten: " + band.getTermine().getKosten());
-		System.out.println();
+		System.out.println();*/
 	}
 
 	private static void testeRepertoire() {
-		Song song;
+		/*Song song;
 		Zeitraum zeitraum;
 		Band band = new Band("Green Day", "Rock");
 
@@ -169,11 +169,11 @@ public class Test {
 		System.out.println();
 		System.out.println("Repertoire: ");
 		System.out.println(band.getRepertoire());
-		System.out.println();
+		System.out.println();*/
 	}
 
 	private static void testeMitglieder() {
-		Mitglied mitglied;
+		/*Mitglied mitglied;
 		Zeitraum zeitraum;
 		Band band = new Band("Green Day", "Rock");
 
@@ -217,6 +217,6 @@ public class Test {
 		System.out.println();
 		System.out.println("Mitglieder: ");
 		System.out.println(band.getMitglieder());
-		System.out.println();
+		System.out.println();*/
 	}
 }
