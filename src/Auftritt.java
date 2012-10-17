@@ -47,4 +47,24 @@ public class Auftritt extends Termin {
 	public String toDetailString() {
 		return String.format("%s, Gage: %,.2f", toString(), gage);
 	}
+
+	/**
+	 * 
+	 * @author Christian Kletzander
+	 * 
+	 */
+	public static class GageSelektor implements Selektor<Auftritt> {
+
+		private double gage;
+
+		public GageSelektor(double gage) {
+			this.gage = gage;
+		}
+
+		@Override
+		public boolean select(Auftritt item) {
+			return item.gage == this.gage;
+		}
+
+	}
 }

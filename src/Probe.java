@@ -42,9 +42,29 @@ public class Probe extends Termin {
 	public String toString() {
 		return "Probe: " + super.toString();
 	}
-	
+
 	@Override
 	public String toDetailString() {
 		return String.format("%s, Raummiete: %,.2f", toString(), raummiete);
 	}
+
+	/**
+	 * 
+	 * @author Christian Kletzander
+	 * 
+	 */
+	public static class RaummieteSelektor implements Selektor<Probe> {
+
+		private double raummiete;
+
+		public RaummieteSelektor(double raummiete) {
+			this.raummiete = raummiete;
+		}
+
+		@Override
+		public boolean select(Probe item) {
+			return item.raummiete == this.raummiete;
+		}
+	}
+
 }
