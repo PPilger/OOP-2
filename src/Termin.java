@@ -16,10 +16,11 @@ public abstract class Termin implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Termin(String ort, Zeitraum zeitraum) {
+	public Termin(String ort, Zeitraum zeitraum, TerminTyp typus) {
 		this.ort = ort;
 		this.zeitraum = zeitraum;
 		this.stack = new Stack<Termin>();
+		this.typus = typus;
 	}
 	
 	public Termin(Termin other) {
@@ -31,7 +32,10 @@ public abstract class Termin implements Serializable {
 	private String ort;
 	private Zeitraum zeitraum;
 	private Stack<Termin> stack;
-
+	private TerminTyp typus;
+	public enum TerminTyp {
+		  Probe, Auftritt;
+		}
 	/**
 	 * 
 	 * @return Gewinn
@@ -116,5 +120,23 @@ public abstract class Termin implements Serializable {
 			return this.zeitraum.enthaelt(item.zeitraum);
 		}
 
+	}
+	
+	public static class AuftrittSelektor implements Selektor<Termin>{
+
+		@Override
+		public boolean select(Termin item) {
+			return item.typus == TerminTyp.Auftritt;
+		}
+		
+	}
+	
+	public static class ProbeSelektor implements Selektor<Termin>{
+
+		@Override
+		public boolean select(Termin item) {
+			return item.typus == TerminTyp.Probe;
+		}
+		
 	}
 }
