@@ -1,4 +1,5 @@
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * 
  */
 public class Zeitraum {
-	List<Date> zeitpunkte;
+	List<Date> zeitpunkte = new ArrayList<Date>();
 	
 	public void add(Date zeitpunkt) {
 		zeitpunkte.add(zeitpunkt);
@@ -62,7 +63,7 @@ public class Zeitraum {
 			return enthaelt(von);
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override
