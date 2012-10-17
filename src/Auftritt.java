@@ -12,15 +12,15 @@ public class Auftritt extends Termin {
 	 * 
 	 * @param ort
 	 *            Ort
-	 * @param zeitIntervall
-	 *            ZeitIntervall
+	 * @param zeitraum
+	 *            Zeitraum
 	 * @param dauer
 	 *            Laenge in ms.
 	 * @param gage
 	 *            Gage
 	 */
-	public Auftritt(String ort, ZeitIntervall zeitIntervall, double gage) {
-		super(ort, zeitIntervall);
+	public Auftritt(String ort, Zeitraum zeitraum, double gage) {
+		super(ort, zeitraum);
 		this.gage = gage;
 	}
 
@@ -53,17 +53,11 @@ public class Auftritt extends Termin {
 	 * @author Christian Kletzander
 	 * 
 	 */
-	public static class GageSelektor implements Selektor<Auftritt> {
-
-		private double gage;
-
-		public GageSelektor(double gage) {
-			this.gage = gage;
-		}
+	public static class AuftrittSelektor implements Selektor<Auftritt> {
 
 		@Override
 		public boolean select(Auftritt item) {
-			return item.gage == this.gage;
+			return item instanceof Auftritt;
 		}
 
 	}

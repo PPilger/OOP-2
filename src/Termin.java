@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
  */
 public abstract class Termin {
 
-	public Termin(String ort, ZeitIntervall zeitIntervall) {
+	public Termin(String ort, Zeitraum zeitraum) {
 		this.ort = ort;
-		this.zeitIntervall = zeitIntervall;
+		this.zeitraum = zeitraum;
 	}
 
 	private String ort;
-	private ZeitIntervall zeitIntervall;
+	private Zeitraum zeitraum;
 
 	/**
 	 * 
@@ -41,15 +41,35 @@ public abstract class Termin {
 	/**
 	 * @return Gibt das lokale Zeitintervall zurueck
 	 */
-	public ZeitIntervall getZeitIntervall() {
-		return zeitIntervall;
+	public Zeitraum getZeitIntervall() {
+		return zeitraum;
 	}
 
 	@Override
 	public String toString() {
 		return ort + " "
-				+ zeitIntervall.toString(new SimpleDateFormat("dd.MM.yyyy hh:mm"));
+				+ zeitraum.toString(new SimpleDateFormat("dd.MM.yyyy hh:mm"));
 	}
 
 	public abstract String toDetailString();
+	
+	/**
+	 * 
+	 * @author Christian Kletzander
+	 *
+	 */
+	public static class ZeitraumSelektor implements Selektor<Termin> {
+
+		private Zeitraum zeitraum;
+		
+		public ZeitraumSelektor(Zeitraum zeitraum) {
+			this.zeitraum = zeitraum;
+		}
+		
+		@Override
+		public boolean select(Termin item) {
+			return this.zeitraum.enthaelt(item.zeitraum);
+		}
+		
+	}
 }

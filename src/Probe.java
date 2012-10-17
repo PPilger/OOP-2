@@ -10,15 +10,15 @@ public class Probe extends Termin {
 	 * 
 	 * @param ort
 	 *            Ort
-	 * @param zeitIntervall
-	 *            ZeitIntervall
+	 * @param zeitraum
+	 *            Zeitraum
 	 * @param dauer
 	 *            Laenge in ms.
 	 * @param raummiete
 	 *            Miete fuer Veranstaltung
 	 */
-	public Probe(String ort, ZeitIntervall zeitIntervall, double raummiete) {
-		super(ort, zeitIntervall);
+	public Probe(String ort, Zeitraum zeitraum, double raummiete) {
+		super(ort, zeitraum);
 		this.raummiete = raummiete;
 	}
 
@@ -53,18 +53,13 @@ public class Probe extends Termin {
 	 * @author Christian Kletzander
 	 * 
 	 */
-	public static class RaummieteSelektor implements Selektor<Probe> {
-
-		private double raummiete;
-
-		public RaummieteSelektor(double raummiete) {
-			this.raummiete = raummiete;
-		}
+	public static class ProbeSelektor implements Selektor<Probe> {
 
 		@Override
 		public boolean select(Probe item) {
-			return item.raummiete == this.raummiete;
+			return item instanceof Probe;
 		}
+
 	}
 
 }
