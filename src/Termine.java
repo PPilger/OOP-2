@@ -71,6 +71,22 @@ public class Termine implements Serializable {
 		return removed;
 	}
 
+	public void setOrt(String ort) {
+		for (Termin termin : termine) {
+			if (select(termin)) {
+				termin.setOrt(ort);
+			}
+		}
+	}
+	
+	public void setZeitraum(Zeitraum zeitraum) {
+		for (Termin termin : termine) {
+			if (select(termin)) {
+				termin.setZeitraum(zeitraum);
+			}
+		}
+	}
+
 	/**
 	 * Berechnet den Gewinn aller selektierten Termine.
 	 * 
