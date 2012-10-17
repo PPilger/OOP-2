@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Ort {
+public class Ort implements Serializable{
 
 	private String bezeichnung;
 	private ArrayList<String> infrastruktur;
@@ -15,7 +16,9 @@ public class Ort {
 	{
 		return "Bezeichnung: " + bezeichnung + infrastruktur.toString();
 	}
-		
+	
+	private Ort(){bezeichnung = "";infrastruktur = new ArrayList<String>();}
+	
 	public Ort(String bezeichnung, ArrayList<String> infrastruktur)
 	{
 		this.bezeichnung = bezeichnung; this.infrastruktur = infrastruktur;
