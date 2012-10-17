@@ -21,7 +21,12 @@ public class Probe extends Termin {
 		super(ort, zeitraum);
 		this.raummiete = raummiete;
 	}
-
+	
+	public Probe(Probe other) {
+		super(other);
+		this.raummiete = other.raummiete;
+	}
+	
 	private double raummiete;
 
 	@Override
@@ -48,6 +53,15 @@ public class Probe extends Termin {
 		return String.format("%s, Raummiete: %,.2f", toString(), raummiete);
 	}
 
+	public Probe duplikat() {
+		return new Probe(this);
+	}
+	
+	public void setRaummiete(double raummiete) {
+		stack.push(this.duplikat());
+		this.raummiete = raummiete;
+	}
+	
 	/**
 	 * 
 	 * @author Christian Kletzander

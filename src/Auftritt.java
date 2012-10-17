@@ -23,6 +23,11 @@ public class Auftritt extends Termin {
 		super(ort, zeitraum);
 		this.gage = gage;
 	}
+	
+	public Auftritt(Auftritt other) {
+		super(other);
+		this.gage = other.gage;
+	}
 
 	@Override
 	/**
@@ -46,6 +51,15 @@ public class Auftritt extends Termin {
 	@Override
 	public String toDetailString() {
 		return String.format("%s, Gage: %,.2f", toString(), gage);
+	}
+	
+	public Auftritt duplikat() {
+		return new Auftritt(this);
+	}
+	
+	public void setGage(double gage) {
+		stack.push(this.duplikat());
+		this.gage = gage;
 	}
 
 	/**
