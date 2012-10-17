@@ -1,12 +1,17 @@
 import java.util.Date;
+import java.io.*;
 
 /**
  * 
  * @author Christian Kletzander
  * 
  */
-public class Mitglied {
+public class Mitglied implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Variablendefinition
 	private String name;
 	private String telNr;
@@ -34,6 +39,24 @@ public class Mitglied {
 		return toString() + " " + this.zeitraum + "\n" + "TelefonNr: "
 				+ this.telNr;
 	}
+	
+	 /*private void writeObject(java.io.ObjectOutputStream out)throws IOException
+	{
+			out.writeObject(name);
+			out.writeObject(telNr);
+			out.writeObject(instrument);
+			out.writeObject(zeitraum);
+			out.close();
+	}
+	
+	 private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
+	{
+				name = (String) in.readObject();
+				telNr = (String) in.readObject();
+				instrument = (String) in.readObject();
+				zeitraum = (Zeitraum) in.readObject();
+				in.close();
+	}*/
 	
 	/**
 	 * 
