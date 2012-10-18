@@ -6,6 +6,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +58,8 @@ public class Test {
 		// System.out.println("+ " + mitglied.toDetailString());
 		//
 		// prog.quit();
-		testeTermine();
+		// testeTermine();
+		testeRepertoire();
 
 		/*
 		 * System.out.println("Teste Band"); System.out.println(); testeBand();
@@ -84,7 +86,7 @@ public class Test {
 		Zeitraum zeitraum;
 		Band band = new Band("Green Day", "Rock");
 		List<Mitglied> mitglieder = new ArrayList<Mitglied>();
-		
+
 		zeitraum = new Zeitraum(toDate(1989, 3, 4));
 		Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
 				"Gitarre", zeitraum);
@@ -99,7 +101,7 @@ public class Test {
 		zeitraum = new Zeitraum(toDate(1990, 1, 1));
 		mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug", zeitraum);
 		mitglieder.add(mitglied);
-		
+
 		System.out.println(mitglieder);
 
 		// Auftritte
@@ -151,12 +153,12 @@ public class Test {
 		System.out.println("Posteingang:");
 		System.out.println(mitglied.getNachrichten());
 		System.out.println(mitglied.getTerminvorschlaege());
-		
-		for(Mitglied m : mitglieder) {
+
+		for (Mitglied m : mitglieder) {
 			Random r = new Random();
 			Terminvorschlag t;
-			while((t = m.getTerminvorschlaege().poll()) != null) {
-				if(r.nextDouble() < 0.05) {
+			while ((t = m.getTerminvorschlaege().poll()) != null) {
+				if (r.nextDouble() < 0.05) {
 					t.decline(m, "hab keine Zeit!!!");
 				} else {
 					t.accept(m);
@@ -168,10 +170,10 @@ public class Test {
 		System.out.println("Posteingang:");
 		System.out.println(mitglied.getNachrichten());
 		System.out.println(mitglied.getTerminvorschlaege());
-		while(!mitglied.getTerminvorschlaege().isEmpty()) {
+		while (!mitglied.getTerminvorschlaege().isEmpty()) {
 			mitglied.getTerminvorschlaege().poll();
 		}
-		
+
 		zeitraum = new Zeitraum(toDate(2012, 7, 2), toDate(2012, 9, 1));
 
 		System.out.println();
@@ -216,39 +218,65 @@ public class Test {
 	}
 
 	private static void testeRepertoire() {
-		/*
-		 * Song song; Zeitraum zeitraum; Band band = new Band("Green Day",
-		 * "Rock");
-		 * 
-		 * zeitraum = new ZeitAb(toDate(2005, 3, 6)); song = new Song("Holiday",
-		 * 200, zeitraum); band.getRepertoire().add(song);
-		 * System.out.println("+ " + song.toDetailString());
-		 * 
-		 * zeitraum = new ZeitIntervall(toDate(1994, 2, 3), toDate(2004, 5, 3));
-		 * song = new Song("Basketcase", 195, zeitraum);
-		 * band.getRepertoire().add(song); System.out.println("+ " +
-		 * song.toDetailString());
-		 * 
-		 * zeitraum = new ZeitAb(toDate(2004, 4, 4)); song = new
-		 * Song("American Idiot", 195, zeitraum);
-		 * band.getRepertoire().add(song); System.out.println("+ " +
-		 * song.toDetailString());
-		 * 
-		 * System.out.println(); System.out.println("Repertoire: ");
-		 * System.out.println(band.getRepertoire()); System.out.println();
-		 * System.out.println("Repertoire am 1.1.2000: ");
-		 * System.out.println(band.getRepertoire(toDate(2000, 1, 1)));
-		 * System.out.println(); System.out.println("Repertoire am 1.1.2012: ");
-		 * System.out.println(band.getRepertoire(toDate(2012, 1, 1)));
-		 * System.out.println();
-		 * 
-		 * song = band.getRepertoire().get(1);
-		 * band.getRepertoire().remove(song); System.out.println("- " +
-		 * song.toDetailString());
-		 * 
-		 * System.out.println(); System.out.println("Repertoire: ");
-		 * System.out.println(band.getRepertoire()); System.out.println();
-		 */
+
+		Song song;
+		Zeitraum zeitraum;
+		List<Variante> varianten;
+		List<Selector<Song>> songSelector;
+		List<Selector<Variante>> variantenSelector;
+		Band band = new Band("Green Day", "Rock");
+
+		zeitraum = new Zeitraum(toDate(2005, 3, 6));
+		varianten = new ArrayList<Variante>();
+		varianten.add(new Variante("Normal", 200));
+		varianten.add(new Variante("Acoustic", 210));
+		song = new Song("Holiday", zeitraum, varianten);
+		band.getRepertoire().add(song);
+		System.out.println("+ " + song.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(1994, 2, 3), toDate(2004, 5, 3));
+		varianten = new ArrayList<Variante>();
+		varianten.add(new Variante("Normal", 195));
+		song = new Song("Basketcase", zeitraum, varianten);
+		band.getRepertoire().add(song);
+		System.out.println("+ " + song.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2004, 4, 4));
+		varianten = new ArrayList<Variante>();
+		varianten.add(new Variante("Normal", 195));
+		varianten.add(new Variante("Acoustic", 200));
+		song = new Song("American Idiot", zeitraum, varianten);
+		band.getRepertoire().add(song);
+		System.out.println("+ " + song.toDetailString());
+		
+		System.out.println();
+		System.out.println("Repertoire: ");
+		variantenSelector = new ArrayList<Selector<Variante>>();
+		variantenSelector.add(new Variante.BezeichnungSelektor("Acoustic"));
+		
+		System.out.println(band.getRepertoire());
+		System.out.println(band.getRepertoire().getSongVarianten());
+		System.out.println(band.getRepertoire().getSongVarianten(variantenSelector));
+		
+		System.out.println();
+		System.out.println("Repertoire am 1.1.2000: ");
+		songSelector = new ArrayList<Selector<Song>>();
+		songSelector.add(new Song.ZeitpunktSelektor(toDate(2000, 1, 1)));
+		
+		System.out.println(band.getRepertoire(songSelector));
+		System.out.println(band.getRepertoire(songSelector).getSongVarianten());
+		System.out.println(band.getRepertoire(songSelector).getSongVarianten(variantenSelector));
+
+		System.out.println();
+		System.out.println("Repertoire am 1.1.2012: ");
+		songSelector = new ArrayList<Selector<Song>>();
+		songSelector.add(new Song.ZeitpunktSelektor(toDate(2012, 1, 1)));
+		
+		System.out.println(band.getRepertoire(songSelector));
+		System.out.println(band.getRepertoire(songSelector).getSongVarianten());
+		System.out.println(band.getRepertoire(songSelector).getSongVarianten(variantenSelector));
+		
+		System.out.println();
 	}
 
 	private static void testeMitglieder() {

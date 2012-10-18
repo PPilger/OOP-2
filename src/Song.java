@@ -1,8 +1,6 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -10,49 +8,30 @@ import java.util.Date;
  * 
  */
 public class Song implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	private String name;
-	private int laenge;
 	private Zeitraum zeitraum;
+	private List<Variante> varianten;
 
 	// Konstruktor
-	public Song(String name, int laenge, Zeitraum zeitraum) {
+	public Song(String name, Zeitraum zeitraum, List<Variante> varianten) {
 		this.name = name;
-		this.laenge = laenge;
 		this.zeitraum = zeitraum;
+		this.varianten = varianten;
 	}
-
-	public Zeitraum getZeitraum() {
-		return this.zeitraum;
+	
+	public List<Variante> getVarianten() {
+		return varianten;
 	}
 
 	public String toString() {
-		return String.format("%s (%d:%02d)", this.name, this.laenge / 60,
-				this.laenge % 60);
+		return name;
 	}
 
 	public String toDetailString() {
-		return toString() + " " + this.zeitraum;
+		return toString() + " " + zeitraum;
 	}
-
-	/*private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.write(laenge);
-		out.writeObject(name);
-		out.writeObject(zeitraum);
-		out.close();
-	}
-
-	private void readObject(java.io.ObjectInputStream in) throws IOException,
-			ClassNotFoundException {
-		laenge = in.readInt();
-		name = (String) in.readObject();
-		zeitraum = (Zeitraum) in.readObject();
-		in.close();
-	}*/
 
 	/**
 	 * 
@@ -68,7 +47,7 @@ public class Song implements Serializable {
 
 		@Override
 		public boolean select(Song item) {
-			return item.getZeitraum().inZeitraum(zeitpunkt);
+			return item.zeitraum.inZeitraum(zeitpunkt);
 		}
 
 	}
@@ -90,52 +69,5 @@ public class Song implements Serializable {
 		public boolean select(Song item) {
 			return item.name.compareToIgnoreCase(name) == 0;
 		}
-	}
-
-	/**
-	 * 
-	 * @author Kögler Alexander
-	 * 
-	 */
-	public static class LaengeSelektor implements Selector<Song> {
-
-		private int min, max;
-
-		/**
-		 * Selektor, der sicher stellt, dass beide Parameter passen in bezug auf
-		 * die Länge des Musikstückes
-		 * 
-		 * @param min
-		 *            Musikstück muss mindesten so lange dauern, alternativ -inf
-		 *            angeben
-		 * @param max
-		 *            Musikstück darf maximal solange dauern, alternativ +inf
-		 *            angeben
-		 */
-		public LaengeSelektor(int min, int max) {
-			this.min = min;
-			this.max = max;
-		}
-
-		/**
-		 * Selektor der sicherstellt, dass das Musikstück genau so lange ist
-		 * 
-		 * @param equalTo
-		 *            Dauer des Musikstücks muss genau solange sein wie der
-		 *            Parameter
-		 */
-		public LaengeSelektor(int equalTo) {
-			this(equalTo, equalTo);
-		}
-
-		@Override
-		public boolean select(Song item) {
-			if (min == max) {
-				return item.laenge == min;
-			} else {
-				return min <= item.laenge && item.laenge <= max;
-			}
-		}
-
 	}
 }

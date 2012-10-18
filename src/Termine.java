@@ -32,11 +32,13 @@ public class Termine implements Serializable {
 	public Termine(Termine base, List<Selector<Termin>> selectors) {
 		this.termine = base.termine;
 		this.selectors = selectors;
+		this.selectors.addAll(base.selectors);
 	}
 
 	/**
-	 * Erstellt einen neuen Terminvorschlag. Dieser wird an alle teilnehmenden
-	 * Mitglieder versendet.
+	 * Erstellt einen neuen Terminvorschlag. Dieser wird an alle Teilnehmer
+	 * versendet. Wenn alle Teilnehmer annehmen, wird der Termin automatisch
+	 * gespeichert.
 	 * 
 	 * @param termin
 	 *            der neue Termin
@@ -60,7 +62,7 @@ public class Termine implements Serializable {
 		while (iter.hasNext()) {
 			Termin termin = iter.next();
 			if (select(termin)) {
-				for(Mitglied teilnehmer : termin.getTeilnehmer()) {
+				for (Mitglied teilnehmer : termin.getTeilnehmer()) {
 					teilnehmer.sende(termin + " wurde entfernt!");
 				}
 				iter.remove();

@@ -32,23 +32,17 @@ public class Songs implements Serializable {
 	public Songs(Songs base, List<Selector<Song>> selectors) {
 		this.songs = base.songs;
 		this.selectors = selectors;
+		this.selectors.addAll(base.selectors);
 	}
 
 	/**
-	 * Fuegt einen neuen Song hinzu, wenn dieser von den Selektoren selektiert
-	 * werden kann. Kann er nicht selektiert werden, wird er nicht hinzugefuegt
-	 * und false zurueckgegeben.
+	 * Fuegt einen neuen Song hinzu.
 	 * 
 	 * @param song
 	 *            der neue Song
-	 * @return true wenn der Song hinzugefuegt wurde, false anderenfalls.
 	 */
-	public boolean add(Song song) {
-		if (select(song)) {
-			return songs.add(song);
-		} else {
-			return false;
-		}
+	public void add(Song song) {
+		songs.add(song);
 	}
 
 	/**
@@ -70,6 +64,24 @@ public class Songs implements Serializable {
 
 		return removed;
 	}
+	
+	public List<SongVariante> getSongVarianten() {
+		return getSongVarianten(new ArrayList<Selector<Variante>>());
+	}
+	
+	public List<SongVariante> getSongVarianten(List<Selector<Variante>> selectors) {
+		List<SongVariante> songVarianten = new ArrayList<SongVariante>();
+		for(Song song : songs) {
+			if(select(song)) {
+				for(Variante variante : song.getVarianten()) {
+					if(select(variante, selectors)) {
+						songVarianten.add(new SongVariante(song, variante));
+					}
+				}
+			}
+		}
+		return songVarianten;
+	}
 
 	/**
 	 * @param song
@@ -79,6 +91,21 @@ public class Songs implements Serializable {
 	private boolean select(Song song) {
 		for (Selector<Song> selector : selectors) {
 			if (!selector.select(song)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	/**
+	 * @param variante
+	 * @return true, wenn alle Selektoren die Variante selektieren, false
+	 *         anderenfalls.
+	 */
+	private boolean select(Variante variante, List<Selector<Variante>> selectors) {
+		for (Selector<Variante> selector : selectors) {
+			if (!selector.select(variante)) {
 				return false;
 			}
 		}

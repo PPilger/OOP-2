@@ -32,23 +32,17 @@ public class Mitglieder implements Serializable {
 	public Mitglieder(Mitglieder base, List<Selector<Mitglied>> selectors) {
 		this.mitglieder = base.mitglieder;
 		this.selectors = selectors;
+		this.selectors.addAll(base.selectors);
 	}
 
 	/**
-	 * Fuegt eine neues Mitglied hinzu, wenn dieser von den Selektoren selektiert
-	 * werden kann. Kann er nicht selektiert werden, wird er nicht hinzugefuegt
-	 * und false zurueckgegeben.
+	 * Fuegt eine neues Mitglied hinzu.
 	 * 
 	 * @param mitglied
 	 *            das neue Mitglied
-	 * @return true wenn das Mitglied hinzugefuegt wurde, false anderenfalls.
 	 */
-	public boolean add(Mitglied mitglied) {
-		if (select(mitglied)) {
-			return mitglieder.add(mitglied);
-		} else {
-			return false;
-		}
+	public void add(Mitglied mitglied) {
+		mitglieder.add(mitglied);
 	}
 
 	/**
