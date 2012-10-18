@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Speichert Ort, Zeitraum, Dauer ab. Bietet Methoden fuer die kaufmaennische
@@ -16,15 +17,19 @@ public class Termin implements Serializable {
 	private Zeitraum zeitraum;
 	private double kosten;
 	private double umsatz;
+	private List<Mitglied> teilnehmer; // aenderungen der teilnehmer sind nicht
+										// zugelassen
 
 	private Termin orig;
 
-	public Termin(Typ typus, Ort ort, Zeitraum zeitraum, double kosten, double umsatz) {
+	public Termin(Typ typus, Ort ort, Zeitraum zeitraum, double kosten,
+			double umsatz, List<Mitglied> teilnehmer) {
 		this.typus = typus;
 		this.ort = ort;
 		this.zeitraum = zeitraum;
 		this.kosten = kosten;
 		this.umsatz = umsatz;
+		this.teilnehmer = teilnehmer;
 		this.orig = null;
 	}
 
@@ -34,7 +39,9 @@ public class Termin implements Serializable {
 		this.zeitraum = new Zeitraum(other.zeitraum);
 		this.kosten = other.kosten;
 		this.umsatz = other.umsatz;
-		this.orig = other.orig; // flache kopie
+		// flache kopie, aenderungen der teilnehmer sind nicht zugelassen
+		this.teilnehmer = other.teilnehmer;
+		this.orig = other.orig;
 	}
 
 	public double getKosten() {
@@ -45,8 +52,21 @@ public class Termin implements Serializable {
 		return umsatz;
 	}
 
-	public void save() {
+	/**
+	 * @return Teilnehmerliste. Diese darf nicht geaendert werden!
+	 */
+	public List<Mitglied> getTeilnehmer() {
+		return teilnehmer;
+	}
+
+	public void prepareUpdate() {
 		this.orig = new Termin(this);
+	}
+	
+	public void meldeUpdate(String aenderung) {
+		for(Mitglied t : teilnehmer) {
+			t.sende(orig + " wurde geaendert: " + aenderung);
+		}
 	}
 
 	/**
@@ -55,8 +75,9 @@ public class Termin implements Serializable {
 	 *            ueberspeichern des Ortes
 	 */
 	public void setOrt(Ort ort) {
-		this.save();
+		this.prepareUpdate();
 		this.ort = ort;
+		this.meldeUpdate(orig.ort + " -> " + ort);
 	}
 
 	/**
@@ -65,32 +86,38 @@ public class Termin implements Serializable {
 	 *            ueberspeichern des Zeitraums
 	 */
 	public void setZeitraum(Zeitraum zeitraum) {
-		this.save();
+		this.prepareUpdate();
 		this.zeitraum = zeitraum;
+		this.meldeUpdate(orig.zeitraum + " -> " + zeitraum);
 	}
 
 	public void setKosten(double kosten) {
-		this.save();
+		this.prepareUpdate();
 		this.kosten = kosten;
+		this.meldeUpdate("Kosten: " + orig.kosten + " -> " + kosten);
 	}
 
 	public void setUmsatz(double umsatz) {
-		this.save();
+		this.prepareUpdate();
 		this.umsatz = umsatz;
+		this.meldeUpdate("Umsatz: " + orig.umsatz + " -> " + umsatz);
 	}
-	
+
 	public boolean undo() {
-		if(orig == null) {
+		if (orig == null) {
 			return false;
 		}
+
+		meldeUpdate("zurueckgesetzt auf vorige Version");
 		
 		this.typus = orig.typus;
 		this.ort = orig.ort;
 		this.zeitraum = orig.zeitraum;
 		this.kosten = orig.kosten;
 		this.umsatz = orig.umsatz;
+		this.teilnehmer = orig.teilnehmer;
 		this.orig = orig.orig;
-		
+
 		return true;
 	}
 
@@ -101,7 +128,8 @@ public class Termin implements Serializable {
 	}
 
 	public String toDetailString() {
-		return String.format("%s, Kosten: %,.2f, Umsatz: %,.2f", toString(), kosten, umsatz);
+		return String.format("%s, Kosten: %,.2f, Umsatz: %,.2f", toString(),
+				kosten, umsatz);
 	}
 
 	public static enum Typ {
@@ -129,7 +157,7 @@ public class Termin implements Serializable {
 		public TypSelektor(Typ typus) {
 			this.typus = typus;
 		}
-		
+
 		@Override
 		public boolean select(Termin item) {
 			return this.typus == item.typus;

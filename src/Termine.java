@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Termine implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private List<Termin> termine;
 	private transient List<Selector<Termin>> selectors;
 
@@ -35,19 +35,16 @@ public class Termine implements Serializable {
 	}
 
 	/**
-	 * Fuegt einen neuen Termin hinzu, wenn dieser von den Selektoren selektiert
-	 * werden kann. Kann er nicht selektiert werden, wird er nicht hinzugefuegt
-	 * und false zurueckgegeben.
+	 * Erstellt einen neuen Terminvorschlag. Dieser wird an alle teilnehmenden
+	 * Mitglieder versendet.
 	 * 
 	 * @param termin
 	 *            der neue Termin
-	 * @return true wenn der Termin hinzugefuegt wurde, false anderenfalls.
 	 */
-	public boolean add(Termin termin) {
-		if (select(termin)) {
-			return termine.add(termin);
-		} else {
-			return false;
+	public void add(Termin termin) {
+		Terminvorschlag vorschlag = new Terminvorschlag(termin, termine);
+		for (Mitglied teilnehmer : termin.getTeilnehmer()) {
+			teilnehmer.sende(vorschlag);
 		}
 	}
 
@@ -63,6 +60,9 @@ public class Termine implements Serializable {
 		while (iter.hasNext()) {
 			Termin termin = iter.next();
 			if (select(termin)) {
+				for(Mitglied teilnehmer : termin.getTeilnehmer()) {
+					teilnehmer.sende(termin + " wurde entfernt!");
+				}
 				iter.remove();
 				removed++;
 			}
@@ -78,7 +78,7 @@ public class Termine implements Serializable {
 			}
 		}
 	}
-	
+
 	public void setZeitraum(Zeitraum zeitraum) {
 		for (Termin termin : termine) {
 			if (select(termin)) {
@@ -102,12 +102,12 @@ public class Termine implements Serializable {
 			}
 		}
 	}
-	
+
 	public void undo() {
 		for (Termin termin : termine) {
 			if (select(termin)) {
 				termin.undo();
-				//false => delete termin?!?
+				// false => delete termin?!?
 			}
 		}
 	}
@@ -161,15 +161,15 @@ public class Termine implements Serializable {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		
+
 		builder.append('[');
-		
+
 		Iterator<Termin> iter = termine.iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			Termin termin = iter.next();
 			if (select(termin)) {
 				builder.append(termin);
@@ -183,13 +183,14 @@ public class Termine implements Serializable {
 				builder.append(termin);
 			}
 		}
-		
+
 		builder.append(']');
-		
+
 		return builder.toString();
 	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
 		in.defaultReadObject();
 		selectors = new ArrayList<Selector<Termin>>();
 	}
