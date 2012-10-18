@@ -156,6 +156,7 @@ public class Test {
 		System.out.println();
 		
 		selected.undo();
+		selected.undo();
 
 		System.out.println("Termine " + zeitraum + " undo: ");
 		System.out.println(selected);
