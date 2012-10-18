@@ -14,11 +14,11 @@ public class Songs implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	List<Song> songs;
-	List<Selektor<Song>> selectors;
+	List<Selector<Song>> selectors;
 
 	public Songs() {
 		this.songs = new ArrayList<Song>();
-		this.selectors = new ArrayList<Selektor<Song>>();
+		this.selectors = new ArrayList<Selector<Song>>();
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Songs implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Songs(Songs base, List<Selektor<Song>> selectors) {
+	public Songs(Songs base, List<Selector<Song>> selectors) {
 		this.songs = base.songs;
 		this.selectors = selectors;
 	}
@@ -77,7 +77,7 @@ public class Songs implements Serializable {
 	 *         anderenfalls.
 	 */
 	private boolean select(Song song) {
-		for (Selektor<Song> selector : selectors) {
+		for (Selector<Song> selector : selectors) {
 			if (!selector.select(song)) {
 				return false;
 			}
@@ -114,6 +114,6 @@ public class Songs implements Serializable {
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		selectors = new ArrayList<Selektor<Song>>();
+		selectors = new ArrayList<Selector<Song>>();
 	}
 }

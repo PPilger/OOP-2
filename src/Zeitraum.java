@@ -23,6 +23,10 @@ public class Zeitraum implements Serializable {
 		this.zeitpunkte.addAll(Arrays.asList(zeitpunkte));
 	}
 
+	public Zeitraum(Zeitraum orig) {
+		this.zeitpunkte.addAll(orig.zeitpunkte);
+	}
+
 	public void add(Date zeitpunkt) {
 		zeitpunkte.add(zeitpunkt);
 	}

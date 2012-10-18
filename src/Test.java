@@ -26,37 +26,38 @@ public class Test {
 
 	public static void main(String[] args) {
 		Programm prog = new Programm();
-		
-		//prog.addBand(new Band("Green Day", "Rock"));
-		Band band = prog.getBand("Green Day");
-		System.out.println(band);
-		System.out.println(band.getMitglieder());
-		  
-		/*Zeitraum zeitraum = new Zeitraum(toDate(1989, 3, 4));
-		Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
-				"Gitarre", zeitraum);
-		band.getMitglieder().add(mitglied);
-		System.out.println("+ " + mitglied.toDetailString());
 
-		zeitraum = new Zeitraum(toDate(1989, 3, 4));
-		mitglied = new Mitglied("Mike Dirnt", "321/12323", "Bass", zeitraum);
-		band.getMitglieder().add(mitglied);
-		System.out.println("+ " + mitglied.toDetailString());
+//		 prog.addBand(new Band("Green Day", "Rock"));
+//		Band band = prog.getBand("Green Day");
+//		System.out.println(band);
+//		System.out.println(band.getMitglieder());
+//
+//		 Zeitraum zeitraum = new Zeitraum(toDate(1989, 3, 4));
+//		 Mitglied mitglied = new Mitglied("Billie Joe Armstrong", "123/45678",
+		// "Gitarre", zeitraum);
+		// band.getMitglieder().add(mitglied);
+		// System.out.println("+ " + mitglied.toDetailString());
+		//
+		// zeitraum = new Zeitraum(toDate(1989, 3, 4));
+		// mitglied = new Mitglied("Mike Dirnt", "321/12323", "Bass", zeitraum);
+		// band.getMitglieder().add(mitglied);
+		// System.out.println("+ " + mitglied.toDetailString());
+		//
+		// zeitraum = new Zeitraum(toDate(1989, 3, 4), toDate(1990, 1, 1));
+		// mitglied = new Mitglied("Al Sobrante", "345/54327", "Schlagzeug",
+		// zeitraum);
+		// band.getMitglieder().add(mitglied);
+		// System.out.println("+ " + mitglied.toDetailString());
+		//
+		// zeitraum = new Zeitraum(toDate(1990, 1, 1));
+		// mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug",
+		// zeitraum);
+		// band.getMitglieder().add(mitglied);
+		// System.out.println("+ " + mitglied.toDetailString());
+		//
+		// prog.quit();
+		testeTermine();
 
-		zeitraum = new Zeitraum(toDate(1989, 3, 4), toDate(1990, 1, 1));
-		mitglied = new Mitglied("Al Sobrante", "345/54327", "Schlagzeug",
-				zeitraum);
-		band.getMitglieder().add(mitglied);
-		System.out.println("+ " + mitglied.toDetailString());
-
-		zeitraum = new Zeitraum(toDate(1990, 1, 1));
-		mitglied = new Mitglied("Tre Cool", "943/38321", "Schlagzeug",
-				zeitraum);
-		band.getMitglieder().add(mitglied);
-		System.out.println("+ " + mitglied.toDetailString());*/
-		
-		prog.quit();
-		
 		/*
 		 * System.out.println("Teste Band"); System.out.println(); testeBand();
 		 * System.out.println(); System.out.println();
@@ -78,75 +79,121 @@ public class Test {
 	}
 
 	private static void testeTermine() {
-		/*
-		 * Termin termin; ZeitIntervall zeitIntervall; Band band = new
-		 * Band("Green Day", "Rock");
-		 * 
-		 * // Auftritte zeitIntervall = new ZeitIntervall(toDate(2012, 9, 1, 18,
-		 * 0), toDate( 2012, 9, 2, 1, 0)); termin = new Auftritt("Konstanz",
-		 * zeitIntervall, 100000); band.getTermine().add(termin);
-		 * System.out.println("+ " + termin.toDetailString());
-		 * 
-		 * zeitIntervall = new ZeitIntervall(toDate(2012, 8, 30, 16, 0), toDate(
-		 * 2012, 8, 30, 23, 0)); termin = new Auftritt("Berlin", zeitIntervall,
-		 * 250000); band.getTermine().add(termin); System.out.println("+ " +
-		 * termin.toDetailString());
-		 * 
-		 * zeitIntervall = new ZeitIntervall(toDate(2010, 7, 1, 17, 0), toDate(
-		 * 2010, 7, 1, 22, 0)); termin = new Auftritt("Mainz", zeitIntervall,
-		 * 80000); band.getTermine().add(termin); System.out.println("+ " +
-		 * termin.toDetailString());
-		 * 
-		 * // Termine zeitIntervall = new ZeitIntervall(toDate(2012, 7, 1, 8,
-		 * 0), toDate( 2012, 7, 1, 15, 0)); termin = new Probe("Studio",
-		 * zeitIntervall, 10000); band.getTermine().add(termin);
-		 * System.out.println("+ " + termin.toDetailString());
-		 * 
-		 * zeitIntervall = new ZeitIntervall(toDate(2012, 7, 20, 10, 0), toDate(
-		 * 2012, 7, 20, 20, 0)); termin = new Probe("zu Hause", zeitIntervall,
-		 * 10); band.getTermine().add(termin); System.out.println("+ " +
-		 * termin.toDetailString());
-		 * 
-		 * zeitIntervall = new ZeitIntervall(toDate(2010, 9, 1, 9, 0), toDate(
-		 * 2010, 9, 1, 18, 0)); termin = new Probe("Stadthalle", zeitIntervall,
-		 * 20000); band.getTermine().add(termin); System.out.println("+ " +
-		 * termin.toDetailString());
-		 * 
-		 * Zeitraum zeitraum = new ZeitIntervall(toDate(2012, 7, 2),
-		 * toDate(2012, 9, 1));
-		 * 
-		 * System.out.println(); System.out.println("Termine: ");
-		 * System.out.println(band.getTermine()); System.out.println("Gewinn: "
-		 * + band.getTermine().getGewinn()); System.out.println("Kosten: " +
-		 * band.getTermine().getKosten()); System.out.println();
-		 * System.out.println("Termine " + zeitraum + ": ");
-		 * System.out.println(band.getTermine(zeitraum));
-		 * System.out.println("Gewinn: " +
-		 * band.getTermine(zeitraum).getGewinn()); System.out.println("Kosten: "
-		 * + band.getTermine(zeitraum).getKosten()); System.out.println();
-		 * System.out.println("Proben " + zeitraum + ": ");
-		 * System.out.println(band.getTermine(Probe.class, zeitraum));
-		 * System.out.println("Gewinn: " + band.getTermine(Probe.class,
-		 * zeitraum).getGewinn()); System.out.println("Kosten: " +
-		 * band.getTermine(Probe.class, zeitraum).getKosten());
-		 * System.out.println(); System.out.println("Auftritte " + zeitraum +
-		 * ": "); System.out.println(band.getTermine(Auftritt.class, zeitraum));
-		 * System.out.println("Gewinn: " + band.getTermine(Auftritt.class,
-		 * zeitraum).getGewinn()); System.out.println("Kosten: " +
-		 * band.getTermine(Auftritt.class, zeitraum).getKosten());
-		 * System.out.println();
-		 * 
-		 * termin = band.getTermine().get(1); band.getTermine().remove(termin);
-		 * System.out.println("- " + termin.toDetailString());
-		 * 
-		 * termin = band.getTermine().get(3); band.getTermine().remove(termin);
-		 * System.out.println("- " + termin.toDetailString());
-		 * 
-		 * System.out.println(); System.out.println("Termine: ");
-		 * System.out.println(band.getTermine()); System.out.println("Gewinn: "
-		 * + band.getTermine().getGewinn()); System.out.println("Kosten: " +
-		 * band.getTermine().getKosten()); System.out.println();
-		 */
+		Termin termin;
+		Zeitraum zeitraum;
+		Band band = new Band("Green Day", "Rock");
+
+		// Auftritte
+		zeitraum = new Zeitraum(toDate(2012, 9, 1, 18, 0), toDate(2012, 9, 2,
+				1, 0));
+		termin = new Termin(Termin.Typ.Auftritt, new Ort("Konstanz", null),
+				zeitraum, 0, 100000);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2012, 8, 30, 16, 0), toDate(2012, 8, 30,
+				23, 0));
+		termin = new Termin(Termin.Typ.Auftritt, new Ort("Berlin", null),
+				zeitraum, 0, 250000);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2010, 7, 1, 17, 0), toDate(2010, 7, 1,
+				22, 0));
+		termin = new Termin(Termin.Typ.Auftritt, new Ort("Mainz", null),
+				zeitraum, 0, 80000);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		// Proben
+		zeitraum = new Zeitraum(toDate(2012, 7, 1, 8, 0), toDate(2012, 7, 1,
+				15, 0));
+		termin = new Termin(Termin.Typ.Probe, new Ort("Studio", null),
+				zeitraum, 10000, 0);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2012, 7, 20, 10, 0), toDate(2012, 7, 20,
+				20, 0));
+		termin = new Termin(Termin.Typ.Probe, new Ort("zu Hause", null),
+				zeitraum, 10, 0);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2010, 9, 1, 9, 0), toDate(2010, 9, 1,
+				18, 0));
+		termin = new Termin(Termin.Typ.Probe, new Ort("Stadthalle", null),
+				zeitraum, 20000, 0);
+		band.getTermine().add(termin);
+		System.out.println("+ " + termin.toDetailString());
+
+		zeitraum = new Zeitraum(toDate(2012, 7, 2), toDate(2012, 9, 1));
+
+		System.out.println();
+		System.out.println("Termine: ");
+		System.out.println(band.getTermine());
+		System.out.println("Gewinn: " + band.getTermine().getGewinn());
+		System.out.println("Kosten: " + band.getTermine().getKosten());
+		System.out.println();
+
+		List<Selector<Termin>> sel = new ArrayList<Selector<Termin>>();
+		sel.add(new Termin.ZeitraumSelektor(zeitraum));
+		Termine selected = band.getTermine(sel);
+		
+		System.out.println("Termine " + zeitraum + ": ");
+		System.out.println(selected);
+		System.out.println("Gewinn: " + selected.getGewinn());
+		System.out.println("Kosten: " + selected.getKosten());
+		System.out.println();
+
+		selected.setKosten(15000);
+		band.getTermine().setUmsatz(20100);
+		
+		System.out.println("Termine " + zeitraum + " geaendert: ");
+		System.out.println(selected);
+		System.out.println("Gewinn: " + selected.getGewinn());
+		System.out.println("Kosten: " + selected.getKosten());
+		System.out.println();
+		
+		selected.undo();
+
+		System.out.println("Termine " + zeitraum + " undo: ");
+		System.out.println(selected);
+		System.out.println("Gewinn: " + selected.getGewinn());
+		System.out.println("Kosten: " + selected.getKosten());
+		
+		
+		
+		/*System.out.println("Proben " + zeitraum + ": ");
+		System.out.println(band.getTermine(Probe.class, zeitraum));
+		System.out.println("Gewinn: "
+				+ band.getTermine(Probe.class, zeitraum).getGewinn());
+		System.out.println("Kosten: "
+				+ band.getTermine(Probe.class, zeitraum).getKosten());
+		System.out.println();
+		System.out.println("Auftritte " + zeitraum + ": ");
+		System.out.println(band.getTermine(Auftritt.class, zeitraum));
+		System.out.println("Gewinn: "
+				+ band.getTermine(Auftritt.class, zeitraum).getGewinn());
+		System.out.println("Kosten: "
+				+ band.getTermine(Auftritt.class, zeitraum).getKosten());
+		System.out.println();
+
+		termin = band.getTermine().get(1);
+		band.getTermine().remove(termin);
+		System.out.println("- " + termin.toDetailString());
+
+		termin = band.getTermine().get(3);
+		band.getTermine().remove(termin);
+		System.out.println("- " + termin.toDetailString());
+
+		System.out.println();
+		System.out.println("Termine: ");
+		System.out.println(band.getTermine());
+		System.out.println("Gewinn: " + band.getTermine().getGewinn());
+		System.out.println("Kosten: " + band.getTermine().getKosten());
+		System.out.println();*/
+
 	}
 
 	private static void testeRepertoire() {

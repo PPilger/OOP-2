@@ -35,7 +35,7 @@ public class Band implements Serializable {
 		return this.repertoire;
 	}
 
-	public Songs getRepertoire(List<Selektor<Song>> selectors) {
+	public Songs getRepertoire(List<Selector<Song>> selectors) {
 		return new Songs(repertoire, selectors);
 	}
 
@@ -43,7 +43,7 @@ public class Band implements Serializable {
 		return this.termine;
 	}
 
-	public Termine getTermine(List<Selektor<Termin>> selectors) {
+	public Termine getTermine(List<Selector<Termin>> selectors) {
 		return new Termine(termine, selectors);
 	}
 
@@ -51,7 +51,7 @@ public class Band implements Serializable {
 		return this.mitglieder;
 	}
 
-	public Mitglieder getMitglieder(List<Selektor<Mitglied>> selectors) {
+	public Mitglieder getMitglieder(List<Selector<Mitglied>> selectors) {
 		return new Mitglieder(mitglieder, selectors);
 	}
 

@@ -59,7 +59,7 @@ public class Song implements Serializable {
 	 * @author Kögler Alexander
 	 * 
 	 */
-	public static class ZeitpunktSelektor implements Selektor<Song> {
+	public static class ZeitpunktSelektor implements Selector<Song> {
 		private Date zeitpunkt;
 
 		public ZeitpunktSelektor(Date zeitpunkt) {
@@ -78,7 +78,7 @@ public class Song implements Serializable {
 	 * @author Kögler Alexander
 	 * 
 	 */
-	public static class NameSelektor implements Selektor<Song> {
+	public static class NameSelektor implements Selector<Song> {
 
 		private String name;
 
@@ -97,7 +97,7 @@ public class Song implements Serializable {
 	 * @author Kögler Alexander
 	 * 
 	 */
-	public static class LaengeSelektor implements Selektor<Song> {
+	public static class LaengeSelektor implements Selector<Song> {
 
 		private int min, max;
 

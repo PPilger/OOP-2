@@ -29,7 +29,7 @@ public class Ort implements Serializable{
 	 * @author Koegler Alexander
 	 *
 	 */
-	public static class BezeichnungSelektor implements Selektor<Ort>{
+	public static class BezeichnungSelektor implements Selector<Ort>{
 
 		private String name;
 		private boolean enthaelt;
@@ -67,7 +67,7 @@ public class Ort implements Serializable{
 	}
 
 	
-	public static class InfrastrukturSelektor implements Selektor<Ort>
+	public static class InfrastrukturSelektor implements Selector<Ort>
 	{
 		private String name;
 		

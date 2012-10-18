@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Stack;
 
 /**
  * Speichert Ort, Zeitraum, Dauer ab. Bietet Methoden fuer die kaufmaennische
@@ -9,105 +8,107 @@ import java.util.Stack;
  * @author Koegler Alexander
  * 
  */
-public abstract class Termin implements Serializable {
-
-	/**
-	 * 
-	 */
+public class Termin implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public Termin(String ort, Zeitraum zeitraum, TerminTyp typus) {
+	private Typ typus;
+	private Ort ort;
+	private Zeitraum zeitraum;
+	private double kosten;
+	private double umsatz;
+
+	private Termin orig;
+
+	public Termin(Typ typus, Ort ort, Zeitraum zeitraum, double kosten, double umsatz) {
+		this.typus = typus;
 		this.ort = ort;
 		this.zeitraum = zeitraum;
-		this.stack = new Stack<Termin>();
-		this.typus = typus;
+		this.kosten = kosten;
+		this.umsatz = umsatz;
+		this.orig = null;
 	}
-	
-	public Termin(Termin other) {
+
+	private Termin(Termin other) {
+		this.typus = other.typus;
 		this.ort = other.ort;
-		this.zeitraum = other.zeitraum;
-		this.stack = new Stack<Termin>();
-	}
-	
-	private String ort;
-	private Zeitraum zeitraum;
-	private Stack<Termin> stack;
-	private TerminTyp typus;
-	public enum TerminTyp {
-		  Probe, Auftritt;
-		}
-	/**
-	 * 
-	 * @return Gewinn
-	 */
-	public double getGewinn() {
-		return getUmsatz() - getKosten();
+		this.zeitraum = new Zeitraum(other.zeitraum);
+		this.kosten = other.kosten;
+		this.umsatz = other.umsatz;
+		this.orig = other.orig; // flache kopie
 	}
 
-	/**
-	 * 
-	 * @return Kosten
-	 */
-	public abstract double getKosten();
-
-	/**
-	 * Berechnet den Umsatz mittels Addition der Kosten und des Gewinns.
-	 * 
-	 * @return Umsatz
-	 */
-	public abstract double getUmsatz();
-
-	/**
-	 * @return Gibt das lokale Zeitintervall zurueck
-	 */
-	public Zeitraum getZeitIntervall() {
-		return zeitraum;
+	public double getKosten() {
+		return kosten;
 	}
 
-	@Override
-	public String toString() {
-		return ort + " "
-				+ zeitraum.toString(new SimpleDateFormat("dd.MM.yyyy hh:mm"));
+	public double getUmsatz() {
+		return umsatz;
 	}
 
-	/**
-	 * @author Christian Kletzander
-	 * @param t
-	 *            Termin der verändert wird
-	 */
 	public void save() {
-		stack.push(this.duplikat());
+		this.orig = new Termin(this);
 	}
-	
+
 	/**
 	 * @author Christian Kletzander
 	 * @param ort
-	 * 		Überspeichern des Ortes
+	 *            ueberspeichern des Ortes
 	 */
-	public void setOrt(String ort) {
+	public void setOrt(Ort ort) {
 		this.save();
 		this.ort = ort;
 	}
-	
+
 	/**
 	 * @author Christian Kletzander
 	 * @param zeitraum
-	 * 		Überspeichern des Zeitraums
+	 *            ueberspeichern des Zeitraums
 	 */
 	public void setZeitraum(Zeitraum zeitraum) {
 		this.save();
 		this.zeitraum = zeitraum;
 	}
 
-	public abstract String toDetailString();
-	public abstract Termin duplikat();
+	public void setKosten(double kosten) {
+		this.save();
+		this.kosten = kosten;
+	}
+
+	public void setUmsatz(double umsatz) {
+		this.save();
+		this.umsatz = umsatz;
+	}
 	
-	/**
-	 * 
-	 * @author Christian Kletzander
-	 * 
-	 */
-	public static class ZeitraumSelektor implements Selektor<Termin> {
+	public boolean undo() {
+		if(orig == null) {
+			return false;
+		}
+		
+		this.typus = orig.typus;
+		this.ort = orig.ort;
+		this.zeitraum = orig.zeitraum;
+		this.kosten = orig.kosten;
+		this.umsatz = orig.umsatz;
+		this.orig = orig.orig;
+		
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return typus + ": " + ort + " "
+				+ zeitraum.toString(new SimpleDateFormat("dd.MM.yyyy hh:mm"));
+	}
+
+	public String toDetailString() {
+		return String.format("%s, Kosten: %,.2f, Umsatz: %,.2f", toString(), kosten, umsatz);
+	}
+
+	public static enum Typ {
+		Probe, Auftritt;
+	}
+
+	public static class ZeitraumSelektor implements Selector<Termin> {
 
 		private Zeitraum zeitraum;
 
@@ -121,22 +122,18 @@ public abstract class Termin implements Serializable {
 		}
 
 	}
-	
-	public static class AuftrittSelektor implements Selektor<Termin>{
 
-		@Override
-		public boolean select(Termin item) {
-			return item.typus == TerminTyp.Auftritt;
+	public static class TypSelektor implements Selector<Termin> {
+		private Typ typus;
+
+		public TypSelektor(Typ typus) {
+			this.typus = typus;
 		}
 		
-	}
-	
-	public static class ProbeSelektor implements Selektor<Termin>{
-
 		@Override
 		public boolean select(Termin item) {
-			return item.typus == TerminTyp.Probe;
+			return this.typus == item.typus;
 		}
-		
+
 	}
 }

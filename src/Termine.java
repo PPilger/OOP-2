@@ -14,11 +14,11 @@ public class Termine implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<Termin> termine;
-	private transient List<Selektor<Termin>> selectors;
+	private transient List<Selector<Termin>> selectors;
 
 	public Termine() {
 		this.termine = new ArrayList<Termin>();
-		this.selectors = new ArrayList<Selektor<Termin>>();
+		this.selectors = new ArrayList<Selector<Termin>>();
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Termine implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Termine(Termine base, List<Selektor<Termin>> selectors) {
+	public Termine(Termine base, List<Selector<Termin>> selectors) {
 		this.termine = base.termine;
 		this.selectors = selectors;
 	}
@@ -71,7 +71,7 @@ public class Termine implements Serializable {
 		return removed;
 	}
 
-	public void setOrt(String ort) {
+	public void setOrt(Ort ort) {
 		for (Termin termin : termine) {
 			if (select(termin)) {
 				termin.setOrt(ort);
@@ -87,6 +87,31 @@ public class Termine implements Serializable {
 		}
 	}
 
+	public void setKosten(double kosten) {
+		for (Termin termin : termine) {
+			if (select(termin)) {
+				termin.setKosten(kosten);
+			}
+		}
+	}
+
+	public void setUmsatz(double umsatz) {
+		for (Termin termin : termine) {
+			if (select(termin)) {
+				termin.setUmsatz(umsatz);
+			}
+		}
+	}
+	
+	public void undo() {
+		for (Termin termin : termine) {
+			if (select(termin)) {
+				termin.undo();
+				//false => delete termin?!?
+			}
+		}
+	}
+
 	/**
 	 * Berechnet den Gewinn aller selektierten Termine.
 	 * 
@@ -98,7 +123,7 @@ public class Termine implements Serializable {
 
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				gewinn += termin.getGewinn();
+				gewinn += termin.getUmsatz() - termin.getKosten();
 			}
 		}
 
@@ -112,15 +137,15 @@ public class Termine implements Serializable {
 	 * @return die Kosten
 	 */
 	public double getKosten() {
-		double gewinn = 0;
+		double kosten = 0;
 
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				gewinn += termin.getKosten();
+				kosten += termin.getKosten();
 			}
 		}
 
-		return gewinn;
+		return kosten;
 	}
 
 	/**
@@ -129,7 +154,7 @@ public class Termine implements Serializable {
 	 *         anderenfalls.
 	 */
 	private boolean select(Termin termin) {
-		for (Selektor<Termin> selector : selectors) {
+		for (Selector<Termin> selector : selectors) {
 			if (!selector.select(termin)) {
 				return false;
 			}
@@ -166,6 +191,6 @@ public class Termine implements Serializable {
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		selectors = new ArrayList<Selektor<Termin>>();
+		selectors = new ArrayList<Selector<Termin>>();
 	}
 }

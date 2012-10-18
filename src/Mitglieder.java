@@ -14,11 +14,11 @@ public class Mitglieder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<Mitglied> mitglieder;
-	private transient List<Selektor<Mitglied>> selectors;
+	private transient List<Selector<Mitglied>> selectors;
 
 	public Mitglieder() {
 		this.mitglieder = new ArrayList<Mitglied>();
-		this.selectors = new ArrayList<Selektor<Mitglied>>();
+		this.selectors = new ArrayList<Selector<Mitglied>>();
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Mitglieder implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Mitglieder(Mitglieder base, List<Selektor<Mitglied>> selectors) {
+	public Mitglieder(Mitglieder base, List<Selector<Mitglied>> selectors) {
 		this.mitglieder = base.mitglieder;
 		this.selectors = selectors;
 	}
@@ -77,7 +77,7 @@ public class Mitglieder implements Serializable {
 	 *         anderenfalls.
 	 */
 	private boolean select(Mitglied mitglied) {
-		for (Selektor<Mitglied> selector : selectors) {
+		for (Selector<Mitglied> selector : selectors) {
 			if (!selector.select(mitglied)) {
 				return false;
 			}
@@ -114,6 +114,6 @@ public class Mitglieder implements Serializable {
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		selectors = new ArrayList<Selektor<Mitglied>>();
+		selectors = new ArrayList<Selector<Mitglied>>();
 	}
 }

@@ -63,7 +63,7 @@ public class Mitglied implements Serializable{
 	 * @author Kögler Alexander
 	 *
 	 */
-	public static class ZeitraumSelektor implements Selektor<Mitglied>
+	public static class ZeitraumSelektor implements Selector<Mitglied>
 	{
 		private Date zeitpunkt;
 		public ZeitraumSelektor(Date zeitpunkt)
@@ -82,7 +82,7 @@ public class Mitglied implements Serializable{
 	 * @author Kögler Alexander
 	 *
 	 */
-	public static class InstrumentSelektor implements Selektor<Mitglied>
+	public static class InstrumentSelektor implements Selector<Mitglied>
 	{
 		private String instrument;
 		public InstrumentSelektor(String instrument)
@@ -100,7 +100,7 @@ public class Mitglied implements Serializable{
 	 * @author Kögler Alexander
 	 *
 	 */
-	public static class NameSelektor implements Selektor<Mitglied>{
+	public static class NameSelektor implements Selector<Mitglied>{
 
 		private String name;
 		public NameSelektor(String name)
