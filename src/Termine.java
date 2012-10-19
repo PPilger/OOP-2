@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import src.Termin.MitgliedBeteiligtSelektor;
 import src.Termin.Typ;
 import src.Termin.TypSelektor;
 
@@ -48,18 +49,35 @@ public class Termine implements Serializable {
 	 */
 	public void add(Termin termin) {
 		Terminvorschlag vorschlag = new Terminvorschlag(termin, termine);
+
+		/*
+		 * Mitglieder mm = new Mitglieder(); for (Mitglied teilnehmer :
+		 * termin.getTeilnehmer()) {mm.add(teilnehmer);
+		 * }List<Selector<Mitglied>> ms = new ArrayList<Selector<Mitglied>>();
+		 * ms.add(new Mitglied.ErsatzmitgliedSelector(true)); mm = new
+		 * Mitglieder(mm, ms);
+		 */
 		
-		for (Mitglied teilnehmer : termin.getTeilnehmer()) {
-			//TODO: Diese Schleife ist nur noetig wenn Mitglied ein Ersatzmitglied ist
-			ArrayList<Selector<Termin>> st = new ArrayList<Selector<Termin>>();
-			st.add(new TypSelektor(Typ.Probe));
-			st.add(new Termin.MitgliedBeteiligtSelektor(teilnehmer));
-			Termine tmp = new Termine(this, st);
-			//TODO: Die statische Zahl aendern! mit dem getBandMin()
-			if (tmp.countSelected() < 12);
-				return;//Mindestanzahl nicth erfuellt verboten, den Teilnehmer zuzulassen, hoffentlich verschwindeet das Onjekt dann im GC
+		Termine tmp1 = new Termine();
+		tmp1.add(termin);
+		tmp1.selectors.add(new Termin.TypSelektor(Typ.Probe));
+		if (tmp1.countSelected() >= 1) {
+			for (Mitglied teilnehmer : termin.getTeilnehmer()) {
+				if (teilnehmer.isErsatzmitglied()) {
+					tmp1 = new Termine(this, new ArrayList<Selector<Termin>>());
+					tmp1.selectors.add(new Termin.TypSelektor(Typ.Probe));
+					tmp1.selectors.add(new Termin.MitgliedBeteiligtSelektor(teilnehmer));
+					// TODO: Die statische Zahl aendern! mit dem getBandMin()
+					if (tmp1.countSelected() < 12)
+						;
+					return;// Mindestanzahl nicth erfuellt verboten, den
+							// Teilnehmer zuzulassen, hoffentlich verschwindeet
+							// das Onjekt dann im GC
+				}
+
+			}
 		}
-		
+
 		for (Mitglied teilnehmer : termin.getTeilnehmer()) {
 			teilnehmer.sende(vorschlag);
 		}
@@ -119,16 +137,16 @@ public class Termine implements Serializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Zaelt die Termine die Selektiert sind
+	 * 
 	 * @return Anzahl der Termine die selektiert sind
 	 */
-	public int countSelected(){
+	public int countSelected() {
 		int cnt = 0;
-		for(Termin t : termine){
-			if(select(t))
-			{
+		for (Termin t : termine) {
+			if (select(t)) {
 				cnt++;
 			}
 		}

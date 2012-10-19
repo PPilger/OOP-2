@@ -38,6 +38,10 @@ public class Mitglied implements Serializable {
 	public Zeitraum getZeitraum() {
 		return this.zeitraum;
 	}
+	
+	public boolean isErsatzmitglied() {
+		return this.ersatzmitglied;
+	}
 
 	public void sende(String nachricht) {
 		this.nachrichten.offer(nachricht);
