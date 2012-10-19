@@ -62,12 +62,19 @@ public class GuV implements Serializable {
 	public double getEinnahmen() {
 		double einnahmen = 0;
 		
+		//Durchiterieren der gespeicherten Posten
 		Iterator<Posten> iter = posten.iterator();
 		while(iter.hasNext()) {
 			Posten posten = iter.next();
 			if(select(posten)) {
 				einnahmen += posten.getEinnahmen();
 			}
+		}
+		
+		//Durchiterieren aller Termine der Band
+		Iterator<Termin> terminIter = band.getTermine().iterator();
+		while(terminIter.hasNext()) {
+			einnahmen += terminIter.next().getEinnahmen();
 		}
 		
 		return einnahmen;
@@ -80,12 +87,19 @@ public class GuV implements Serializable {
 	public double getAusgaben() {
 		double ausgaben = 0;
 		
+		//Durchiterieren der gespeicherten Posten
 		Iterator<Posten> iter = posten.iterator();
 		while(iter.hasNext()) {
 			Posten posten = iter.next();
 			if(select(posten)) {
 				ausgaben += posten.getEinnahmen();
 			}
+		}
+		
+		//Durchiterieren aller Termine der Band
+		Iterator<Termin> terminIter = band.getTermine().iterator();
+		while(terminIter.hasNext()) {
+			ausgaben += terminIter.next().getAusgaben();
 		}
 		
 		return ausgaben;
@@ -98,12 +112,20 @@ public class GuV implements Serializable {
 	public double getGewinn() {
 		double gewinn = 0;
 		
+		//Durchiterieren der gespeicherten Posten
 		Iterator<Posten> iter = posten.iterator();
 		while(iter.hasNext()) {
 			Posten posten = iter.next();
 			if(select(posten)) {
-				gewinn = posten.getEinnahmen() - posten.getAusgaben();
+				gewinn += posten.getEinnahmen() - posten.getAusgaben();
 			}
+		}
+		
+		//Durchiterieren aller Termine der Band
+		Iterator<Termin> terminIter = band.getTermine().iterator();
+		while(terminIter.hasNext()) {
+			Termin termin = terminIter.next();
+			gewinn += termin.getEinnahmen() - termin.getAusgaben();
 		}
 		
 		return gewinn;
