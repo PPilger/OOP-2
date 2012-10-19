@@ -50,8 +50,8 @@ public class Test {
 		// System.out.println("+ " + mitglied.toDetailString());
 		//
 		// prog.quit();
-		// testeTermine();
-		testeRepertoire();
+		testeTermine();
+		//testeRepertoire();
 
 		/*
 		 * System.out.println("Teste Band"); System.out.println(); testeBand();

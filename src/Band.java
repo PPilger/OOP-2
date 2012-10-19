@@ -46,7 +46,7 @@ public class Band implements Serializable {
 	}
 
 	public Termine getTermine(List<Selector<Termin>> selectors) {
-		return new Termine(termine, selectors);
+		return this.termine.selection(selectors);
 	}
 
 	public Mitglieder getMitglieder() {

@@ -11,7 +11,7 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Termine implements Serializable {
+public class Termine implements Iterable<Termin>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Band band;
@@ -32,7 +32,7 @@ public class Termine implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Termine(Termine base, List<Selector<Termin>> selectors) {
+	private Termine(Termine base, List<Selector<Termin>> selectors) {
 		this.band = base.band;
 		this.termine = base.termine;
 		this.selectors = selectors;
@@ -85,50 +85,42 @@ public class Termine implements Serializable {
 	public int remove() {
 		int removed = 0;
 
-		Iterator<Termin> iter = termine.iterator();
+		Iterator<Termin> iter = iterator();
 		while (iter.hasNext()) {
 			Termin termin = iter.next();
-			if (select(termin)) {
-				for (Mitglied teilnehmer : termin.getTeilnehmer()) {
-					teilnehmer.sende(termin + " wurde entfernt!");
-				}
-				iter.remove();
-				removed++;
+
+			for (Mitglied teilnehmer : termin.getTeilnehmer()) {
+				teilnehmer.sende(termin + " wurde entfernt!");
 			}
+
+			iter.remove();
+			removed++;
 		}
 
 		return removed;
 	}
 
 	public void setOrt(Ort ort) {
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				termin.setOrt(ort);
-			}
+		for (Termin termin : this) {
+			termin.setOrt(ort);
 		}
 	}
 
 	public void setZeitraum(Date von, Date bis) {
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				termin.setZeitraum(von, bis);
-			}
+		for (Termin termin : this) {
+			termin.setZeitraum(von, bis);
 		}
 	}
 
 	public void setKosten(double kosten) {
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				termin.setAusgaben(kosten);
-			}
+		for (Termin termin : this) {
+			termin.setAusgaben(kosten);
 		}
 	}
 
 	public void setUmsatz(double umsatz) {
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				termin.setEinnahmen(umsatz);
-			}
+		for (Termin termin : this) {
+			termin.setEinnahmen(umsatz);
 		}
 	}
 
@@ -139,20 +131,15 @@ public class Termine implements Serializable {
 	 */
 	public int count() {
 		int cnt = 0;
-		for (Termin t : termine) {
-			if (select(t)) {
-				cnt++;
-			}
+		for (Termin t : this) {
+			cnt++;
 		}
 		return cnt;
 	}
 
 	public void undo() {
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				termin.undo();
-				// false => delete termin?!?
-			}
+		for (Termin termin : this) {
+			termin.undo();
 		}
 	}
 
@@ -165,10 +152,8 @@ public class Termine implements Serializable {
 	public double getGewinn() {
 		double gewinn = 0;
 
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				gewinn += termin.getEinnahmen() - termin.getAusgaben();
-			}
+		for (Termin termin : this) {
+			gewinn += termin.getEinnahmen() - termin.getAusgaben();
 		}
 
 		return gewinn;
@@ -183,10 +168,8 @@ public class Termine implements Serializable {
 	public double getKosten() {
 		double kosten = 0;
 
-		for (Termin termin : termine) {
-			if (select(termin)) {
-				kosten += termin.getAusgaben();
-			}
+		for (Termin termin : this) {
+			kosten += termin.getAusgaben();
 		}
 
 		return kosten;
@@ -209,23 +192,16 @@ public class Termine implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		Iterator<Termin> iter = iterator();
 
 		builder.append('[');
 
-		Iterator<Termin> iter = termine.iterator();
-		while (iter.hasNext()) {
-			Termin termin = iter.next();
-			if (select(termin)) {
-				builder.append(termin);
-				break;
-			}
+		if (iter.hasNext()) {
+			builder.append(iter.next());
 		}
 		while (iter.hasNext()) {
-			Termin termin = iter.next();
-			if (select(termin)) {
-				builder.append(", ");
-				builder.append(termin);
-			}
+			builder.append(", ");
+			builder.append(iter.next());
 		}
 
 		builder.append(']');
@@ -237,5 +213,50 @@ public class Termine implements Serializable {
 			ClassNotFoundException {
 		in.defaultReadObject();
 		selectors = new ArrayList<Selector<Termin>>();
+	}
+
+	@Override
+	public Iterator<Termin> iterator() {
+		return new Iterator<Termin>() {
+			Iterator<Termin> all = termine.iterator();
+
+			Termin current = null; // das aktuelle Element
+
+			// next: das naechste selektierte Element, oder null wenn das Ende
+			// erreicht wurde
+			Termin next = nextSelected();
+
+			/**
+			 * @return das naechste selektierte Element
+			 */
+			private Termin nextSelected() {
+				while (all.hasNext()) {
+					Termin next = all.next();
+
+					if (select(next)) {
+						return next;
+					}
+				}
+
+				return null;
+			}
+
+			@Override
+			public boolean hasNext() {
+				return next != null;
+			}
+
+			@Override
+			public Termin next() {
+				current = next;
+				next = nextSelected();
+				return current;
+			}
+
+			@Override
+			public void remove() {
+				all.remove();
+			}
+		};
 	}
 }
