@@ -76,7 +76,7 @@ public class Test {
 	private static void testeTermine() {
 		Termin termin;
 		Zeitraum zeitraum;
-		Band band = new Band("Green Day", "Rock");
+		Band band = new Band("Green Day", "Rock", 10);
 		List<Mitglied> mitglieder = new ArrayList<Mitglied>();
 
 		zeitraum = new Zeitraum(toDate(1989, 3, 4));
@@ -218,7 +218,7 @@ public class Test {
 		List<Variante> varianten;
 		List<Selector<Song>> songSelector;
 		List<Selector<Variante>> variantenSelector;
-		Band band = new Band("Green Day", "Rock");
+		Band band = new Band("Green Day", "Rock", 10);
 
 		zeitraum = new Zeitraum(toDate(2005, 3, 6));
 		varianten = new ArrayList<Variante>();
