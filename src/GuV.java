@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -90,6 +91,10 @@ public class GuV implements Serializable {
 		return builder.toString();
 	}
 	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		selectors = new ArrayList<Selector<Posten>>();
+	}
 	
 	
 	
