@@ -38,10 +38,6 @@ public class Mitglied implements Serializable {
 	public Zeitraum getZeitraum() {
 		return this.zeitraum;
 	}
-	
-	public boolean isErsatzmitglied() {
-		return this.ersatzmitglied;
-	}
 
 	public void sende(String nachricht) {
 		this.nachrichten.offer(nachricht);
@@ -68,21 +64,27 @@ public class Mitglied implements Serializable {
 	}
 
 	public String toDetailString() {
-		return toString() + " (" + this.instrument + ") " + this.zeitraum + "\n" + "TelefonNr: "
-				+ this.telNr;
+		return toString() + " (" + this.instrument + ") " + this.zeitraum
+				+ "\n" + "TelefonNr: " + this.telNr;
 	}
 
 	/**
-	 * Gibt entweder Mitglieder die Ersatzmitglieder sind aus, oder jene die keine sind.
+	 * Gibt entweder Mitglieder die Ersatzmitglieder sind aus, oder jene die
+	 * keine sind.
+	 * 
 	 * @author VHD
-	 *
+	 * 
 	 */
 	public static class TypSelector implements Selector<Mitglied> {
 		private boolean isE;
 
 		/**
-		 * Vergleicht den im Parameter übergebenen Wert mit dem boolschen Wert für Ersatzmitglied.
-		 * @param isErsatzmitglied True gibt nur Ersatzmitglieder zurueck, False hingegen nur Stammmitglieder
+		 * Vergleicht den im Parameter übergebenen Wert mit dem boolschen Wert
+		 * für Ersatzmitglied.
+		 * 
+		 * @param isErsatzmitglied
+		 *            True gibt nur Ersatzmitglieder zurueck, False hingegen nur
+		 *            Stammmitglieder
 		 */
 		public TypSelector(boolean isErsatzmitglied) {
 			isE = isErsatzmitglied;

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Band implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	// Variablendefinition
 	private String name;
 	private String ausrichtung;
@@ -23,12 +23,12 @@ public class Band implements Serializable {
 		this.name = name;
 		this.ausrichtung = ausrichtung;
 		this.minProben = minProben;
-		
+
 		this.repertoire = new Songs();
 		this.termine = new Termine(this);
 		this.mitglieder = new Mitglieder();
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -57,10 +57,10 @@ public class Band implements Serializable {
 		return new Mitglieder(mitglieder, selectors);
 	}
 
-	public int getMinimumProben(){
+	public int getMinimumProben() {
 		return this.minProben;
 	}
-	
+
 	public String toString() {
 		return this.name + ", " + this.ausrichtung;
 	}
