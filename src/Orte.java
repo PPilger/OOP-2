@@ -28,7 +28,8 @@ public class Orte implements Serializable{
 		Ort o;
 		Iterator<Ort> iter = orte.iterator();
 		while(iter.hasNext()){
-		if(select(o= iter.next()))
+			o= iter.next();
+		if(select(o))
 					{
 				iter.remove();
 				cnt++;
@@ -46,20 +47,31 @@ public class Orte implements Serializable{
 		return true;
 	}
 	
-	public String toString(){
-		String ret = "";
-		Ort o;
-		Iterator<Ort> orts = orte.iterator();
-		while(orts.hasNext()){
-			 if (select(o = orts.next()))
-				 break;
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append('[');
+		
+		Iterator<Ort> iter = orte.iterator();
+		while(iter.hasNext()) {
+			Ort mitglied = iter.next();
+			if (select(mitglied)) {
+				builder.append(mitglied);
+				break;
+			}
 		}
-		ret += o.toString();
-		while(orts.hasNext()){
-		if(select(o = orts.next())){
-			ret+= ", "; ret+=o.toString();}
+		while (iter.hasNext()) {
+			Ort mitglied = iter.next();
+			if (select(mitglied)) {
+				builder.append(", ");
+				builder.append(mitglied);
+			}
 		}
-		return ret;
+		
+		builder.append(']');
+		
+		return builder.toString();
 	}
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
