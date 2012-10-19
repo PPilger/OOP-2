@@ -12,16 +12,18 @@ public class Band implements Serializable {
 	// Variablendefinition
 	private String name;
 	private String ausrichtung;
+	private int minProben;
 
 	private Songs repertoire;
 	private Termine termine;
 	private Mitglieder mitglieder;
 
 	// Konstruktor
-	public Band(String name, String ausrichtung) {
+	public Band(String name, String ausrichtung, int minProben) {
 		this.name = name;
 		this.ausrichtung = ausrichtung;
-
+		this.minProben = minProben;
+		
 		this.repertoire = new Songs();
 		this.termine = new Termine();
 		this.mitglieder = new Mitglieder();
@@ -55,6 +57,10 @@ public class Band implements Serializable {
 		return new Mitglieder(mitglieder, selectors);
 	}
 
+	public int getMinimumProben(){
+		return this.minProben;
+	}
+	
 	public String toString() {
 		return this.name + ", " + this.ausrichtung;
 	}
