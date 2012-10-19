@@ -77,14 +77,14 @@ public class Mitglied implements Serializable {
 	 * @author VHD
 	 *
 	 */
-	public static class ErsatzmitgliedSelector implements Selector<Mitglied> {
+	public static class TypSelector implements Selector<Mitglied> {
 		private boolean isE;
 
 		/**
 		 * Vergleicht den im Parameter übergebenen Wert mit dem boolschen Wert für Ersatzmitglied.
 		 * @param isErsatzmitglied True gibt nur Ersatzmitglieder zurueck, False hingegen nur Stammmitglieder
 		 */
-		public ErsatzmitgliedSelector(boolean isErsatzmitglied) {
+		public TypSelector(boolean isErsatzmitglied) {
 			isE = isErsatzmitglied;
 		}
 

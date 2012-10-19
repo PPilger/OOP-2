@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import src.Termin.MitgliedBeteiligtSelektor;
-import src.Termin.Typ;
-import src.Termin.TypSelektor;
-
 /**
  * Eine Sammlung von Terminen.
  * 
@@ -17,10 +13,12 @@ import src.Termin.TypSelektor;
 public class Termine implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Band band;
 	private List<Termin> termine;
 	private transient List<Selector<Termin>> selectors;
 
-	public Termine() {
+	public Termine(Band band) {
+		this.band = band;
 		this.termine = new ArrayList<Termin>();
 		this.selectors = new ArrayList<Selector<Termin>>();
 	}
@@ -34,9 +32,14 @@ public class Termine implements Serializable {
 	 * @param selectors
 	 */
 	public Termine(Termine base, List<Selector<Termin>> selectors) {
+		this.band = base.band;
 		this.termine = base.termine;
 		this.selectors = selectors;
 		this.selectors.addAll(base.selectors);
+	}
+
+	public Termine selection(List<Selector<Termin>> selectors) {
+		return new Termine(this, selectors);
 	}
 
 	/**
@@ -49,30 +52,20 @@ public class Termine implements Serializable {
 	 */
 	public void add(Termin termin) {
 		Terminvorschlag vorschlag = new Terminvorschlag(termin, termine);
+		Termin.TypSelektor auftritte = new Termin.TypSelektor(
+				Termin.Typ.Auftritt);
+		Mitglied.TypSelector ersatzmitglieder = new Mitglied.TypSelector(true);
 
-		/*
-		 * Mitglieder mm = new Mitglieder(); for (Mitglied teilnehmer :
-		 * termin.getTeilnehmer()) {mm.add(teilnehmer);
-		 * }List<Selector<Mitglied>> ms = new ArrayList<Selector<Mitglied>>();
-		 * ms.add(new Mitglied.ErsatzmitgliedSelector(true)); mm = new
-		 * Mitglieder(mm, ms);
-		 */
-		
-		Termine tmp1 = new Termine();
-		tmp1.add(termin);
-		tmp1.selectors.add(new Termin.TypSelektor(Typ.Probe));
-		if (tmp1.countSelected() >= 1) {
+		if (auftritte.select(termin)) {
 			for (Mitglied teilnehmer : termin.getTeilnehmer()) {
-				if (teilnehmer.isErsatzmitglied()) {
-					tmp1 = new Termine(this, new ArrayList<Selector<Termin>>());
-					tmp1.selectors.add(new Termin.TypSelektor(Typ.Probe));
-					tmp1.selectors.add(new Termin.MitgliedBeteiligtSelektor(teilnehmer));
-					// TODO: Die statische Zahl aendern! mit dem getBandMin()
-					if (tmp1.countSelected() < 12)
-						;
-					return;// Mindestanzahl nicth erfuellt verboten, den
-							// Teilnehmer zuzulassen, hoffentlich verschwindeet
-							// das Onjekt dann im GC
+				if (ersatzmitglieder.select(teilnehmer)) {
+					List<Selector<Termin>> selectors = new ArrayList<Selector<Termin>>();
+					selectors.add(new Termin.TypSelektor(Termin.Typ.Probe));
+					selectors.add(new Termin.TeilnehmerSelektor(teilnehmer));
+
+					if (selection(selectors).count() < band.getMinimumProben()) {
+						return; // Mindestanzahl nicht erfuellt
+					}
 				}
 
 			}
@@ -143,7 +136,7 @@ public class Termine implements Serializable {
 	 * 
 	 * @return Anzahl der Termine die selektiert sind
 	 */
-	public int countSelected() {
+	public int count() {
 		int cnt = 0;
 		for (Termin t : termine) {
 			if (select(t)) {

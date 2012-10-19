@@ -141,9 +141,9 @@ public class Termin implements Serializable {
 	 * @author VHD
 	 *
 	 */
-	public static class MitgliedBeteiligtSelektor implements Selector<Termin>{
+	public static class TeilnehmerSelektor implements Selector<Termin>{
 		private Mitglied m;
-		public MitgliedBeteiligtSelektor(Mitglied m){
+		public TeilnehmerSelektor(Mitglied m){
 			this.m = m;
 		}
 		
