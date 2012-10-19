@@ -43,6 +43,14 @@ public class Termine implements Iterable<Termin>, Serializable {
 		return new Termine(this, selectors);
 	}
 
+	public Termin getFirst() {
+		Iterator<Termin> iter = iterator();
+		if (iter.hasNext()) {
+			return iterator().next();
+		}
+		return null;
+	}
+
 	/**
 	 * Erstellt einen neuen Terminvorschlag. Dieser wird an alle Teilnehmer
 	 * versendet. Wenn alle Teilnehmer annehmen, wird der Termin automatisch
@@ -131,9 +139,13 @@ public class Termine implements Iterable<Termin>, Serializable {
 	 */
 	public int count() {
 		int cnt = 0;
-		for (Termin t : this) {
+		Iterator<Termin> iter = iterator();
+
+		while (iter.hasNext()) {
+			iter.next();
 			cnt++;
 		}
+
 		return cnt;
 	}
 
