@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import src.Termin.Typ;
+import src.Termin.TypSelektor;
+
 /**
  * Eine Sammlung von Terminen.
  * 
@@ -45,6 +48,18 @@ public class Termine implements Serializable {
 	 */
 	public void add(Termin termin) {
 		Terminvorschlag vorschlag = new Terminvorschlag(termin, termine);
+		
+		for (Mitglied teilnehmer : termin.getTeilnehmer()) {
+			//TODO: Diese Schleife ist nur noetig wenn Mitglied ein Ersatzmitglied ist
+			ArrayList<Selector<Termin>> st = new ArrayList<Selector<Termin>>();
+			st.add(new TypSelektor(Typ.Probe));
+			st.add(new Termin.MitgliedBeteiligtSelektor(teilnehmer));
+			Termine tmp = new Termine(this, st);
+			//TODO: Die statische Zahl aendern! mit dem getBandMin()
+			if (tmp.countSelected() < 12);
+				return;//Mindestanzahl nicth erfuellt verboten, den Teilnehmer zuzulassen, hoffentlich verschwindeet das Onjekt dann im GC
+		}
+		
 		for (Mitglied teilnehmer : termin.getTeilnehmer()) {
 			teilnehmer.sende(vorschlag);
 		}
@@ -103,6 +118,21 @@ public class Termine implements Serializable {
 				termin.setUmsatz(umsatz);
 			}
 		}
+	}
+	
+	/**
+	 * Zaelt die Termine die Selektiert sind
+	 * @return Anzahl der Termine die selektiert sind
+	 */
+	public int countSelected(){
+		int cnt = 0;
+		for(Termin t : termine){
+			if(select(t))
+			{
+				cnt++;
+			}
+		}
+		return cnt;
 	}
 
 	public void undo() {

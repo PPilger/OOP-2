@@ -136,6 +136,23 @@ public class Termin implements Serializable {
 		Probe, Auftritt;
 	}
 
+	/**
+	 * Selektiert jene Termine in denen ein gegebenes Mitglied auch beteiligt ist
+	 * @author VHD
+	 *
+	 */
+	public static class MitgliedBeteiligtSelektor implements Selector<Termin>{
+		private Mitglied m;
+		public MitgliedBeteiligtSelektor(Mitglied m){
+			this.m = m;
+		}
+		
+		@Override
+		public boolean select(Termin item) {
+			return item.teilnehmer.contains(m);
+		}
+	}
+	
 	public static class ZeitraumSelektor implements Selector<Termin> {
 
 		private Zeitraum zeitraum;
