@@ -25,7 +25,7 @@ public class Band implements Serializable {
 		this.minProben = minProben;
 		
 		this.repertoire = new Songs();
-		this.termine = new Termine();
+		this.termine = new Termine(this);
 		this.mitglieder = new Mitglieder();
 	}
 	
