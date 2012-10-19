@@ -21,16 +21,18 @@ public class Mitglied implements Serializable {
 	private Zeitraum zeitraum;
 	private Queue<String> nachrichten;
 	private Queue<Terminvorschlag> terminvorschlaege;
+	private boolean ersatzmitglied;
 
 	// Konstruktor
 	public Mitglied(String name, String telNr, String instrument,
-			Zeitraum zeitraum) {
+			Zeitraum zeitraum, boolean ersatzmitglied) {
 		this.name = name;
 		this.telNr = telNr;
 		this.instrument = instrument;
 		this.zeitraum = zeitraum;
 		this.nachrichten = new LinkedList<String>();
 		this.terminvorschlaege = new LinkedList<Terminvorschlag>();
+		this.ersatzmitglied = ersatzmitglied;
 	}
 
 	public Zeitraum getZeitraum() {
@@ -66,16 +68,27 @@ public class Mitglied implements Serializable {
 				+ this.telNr;
 	}
 
-	/*
-	 * private void writeObject(java.io.ObjectOutputStream out)throws
-	 * IOException { out.writeObject(name); out.writeObject(telNr);
-	 * out.writeObject(instrument); out.writeObject(zeitraum); out.close(); }
-	 * 
-	 * private void readObject(java.io.ObjectInputStream in) throws IOException,
-	 * ClassNotFoundException { name = (String) in.readObject(); telNr =
-	 * (String) in.readObject(); instrument = (String) in.readObject(); zeitraum
-	 * = (Zeitraum) in.readObject(); in.close(); }
+	/**
+	 * Gibt entweder Mitglieder die Ersatzmitglieder sind aus, oder jene die keine sind.
+	 * @author VHD
+	 *
 	 */
+	public static class ErsatzmitgliedSelector implements Selector<Mitglied> {
+		private boolean isE;
+
+		/**
+		 * Vergleicht den im Parameter übergebenen Wert mit dem boolschen Wert für Ersatzmitglied.
+		 * @param isErsatzmitglied True gibt nur Ersatzmitglieder zurueck, False hingegen nur Stammmitglieder
+		 */
+		public ErsatzmitgliedSelector(boolean isErsatzmitglied) {
+			isE = isErsatzmitglied;
+		}
+
+		@Override
+		public boolean select(Mitglied item) {
+			return item.ersatzmitglied == isE;
+		}
+	}
 
 	/**
 	 * 
