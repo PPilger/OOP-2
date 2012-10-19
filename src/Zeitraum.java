@@ -13,12 +13,9 @@ import java.util.List;
  */
 public class Zeitraum implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	List<Date> zeitpunkte = new ArrayList<Date>();
 
-	public Zeitraum() {
-	}
-	
 	public Zeitraum(Date... zeitpunkte) {
 		this.zeitpunkte.addAll(Arrays.asList(zeitpunkte));
 	}
@@ -27,8 +24,18 @@ public class Zeitraum implements Serializable {
 		this.zeitpunkte.addAll(orig.zeitpunkte);
 	}
 
-	public void add(Date zeitpunkt) {
-		zeitpunkte.add(zeitpunkt);
+	public Date getFirst() {
+		if (zeitpunkte.isEmpty()) {
+			return null;
+		}
+		return zeitpunkte.get(0);
+	}
+
+	public Date getLast() {
+		if (zeitpunkte.isEmpty()) {
+			return null;
+		}
+		return zeitpunkte.get(zeitpunkte.size() - 1);
 	}
 
 	public boolean inZeitraum(Date zeitpunkt) {
@@ -177,14 +184,4 @@ public class Zeitraum implements Serializable {
 
 		return false;
 	}
-
-	/*private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		out.writeObject(zeitpunkte);
-		out.close();
-	}
-
-	private void readObject(java.io.ObjectInputStream in) throws IOException,
-			ClassNotFoundException {
-		zeitpunkte = (List<Date>) in.readObject();
-	}*/
 }

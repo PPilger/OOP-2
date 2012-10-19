@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,41 +16,34 @@ public class Termin implements Serializable {
 	private Typ typus;
 	private Ort ort;
 	private Zeitraum zeitraum;
-	private double kosten;
-	private double umsatz;
-	private List<Mitglied> teilnehmer; // aenderungen der teilnehmer sind nicht
-										// zugelassen
+	private Posten posten;
+	private List<Mitglied> teilnehmer; // aenderungen sind nicht zugelassen
 
 	private Termin orig;
 
-	public Termin(Typ typus, Ort ort, Zeitraum zeitraum, double kosten,
-			double umsatz, List<Mitglied> teilnehmer) {
+	private Termin() {
+	}
+
+	public Termin(Typ typus, Ort ort, Date von, Date bis, double ausgaben,
+			double einnahmen, List<Mitglied> teilnehmer) {
 		this.typus = typus;
 		this.ort = ort;
-		this.zeitraum = zeitraum;
-		this.kosten = kosten;
-		this.umsatz = umsatz;
+		this.zeitraum = new Zeitraum(von, bis);
+		this.posten = new Posten(einnahmen, ausgaben, typus.toString(), bis);
 		this.teilnehmer = teilnehmer;
 		this.orig = null;
 	}
-
-	private Termin(Termin other) {
-		this.typus = other.typus;
-		this.ort = other.ort;
-		this.zeitraum = new Zeitraum(other.zeitraum);
-		this.kosten = other.kosten;
-		this.umsatz = other.umsatz;
-		// flache kopie, aenderungen der teilnehmer sind nicht zugelassen
-		this.teilnehmer = other.teilnehmer;
-		this.orig = other.orig;
+	
+	public Posten getPosten() {
+		return posten;
 	}
 
-	public double getKosten() {
-		return kosten;
+	public double getAusgaben() {
+		return posten.getAusgaben();
 	}
 
-	public double getUmsatz() {
-		return umsatz;
+	public double getEinnahmen() {
+		return posten.getEinnahmen();
 	}
 
 	/**
@@ -60,11 +54,45 @@ public class Termin implements Serializable {
 	}
 
 	public void prepareUpdate() {
-		this.orig = new Termin(this);
+		Termin other = new Termin();
+		other.typus = typus;
+
+		// flache kopie (kann nicht geaendert werden, da privat)
+		other.zeitraum = zeitraum;
+
+		// flache kopie (eine aenderung in ort aendert nichts an der bedeutung)
+		other.ort = ort;
+
+		// flache kopie (unveraenderbar)
+		other.posten = posten;
+
+		// flache kopie (aenderungen sind nicht zugelassen)
+		other.teilnehmer = teilnehmer;
+
+		// haenge other hinter this in die historie ein
+		other.orig = orig;
+		this.orig = other;
 	}
-	
+
+	public boolean undo() {
+		if (orig == null) {
+			return false;
+		}
+
+		meldeUpdate("zurueckgesetzt auf vorige Version");
+
+		this.typus = orig.typus;
+		this.ort = orig.ort;
+		this.zeitraum = orig.zeitraum;
+		this.posten = orig.posten;
+		this.teilnehmer = orig.teilnehmer;
+		this.orig = orig.orig;
+
+		return true;
+	}
+
 	public void meldeUpdate(String aenderung) {
-		for(Mitglied t : teilnehmer) {
+		for (Mitglied t : teilnehmer) {
 			t.sende(orig + " wurde geaendert: " + aenderung);
 		}
 	}
@@ -85,40 +113,26 @@ public class Termin implements Serializable {
 	 * @param zeitraum
 	 *            ueberspeichern des Zeitraums
 	 */
-	public void setZeitraum(Zeitraum zeitraum) {
+	public void setZeitraum(Date von, Date bis) {
 		this.prepareUpdate();
-		this.zeitraum = zeitraum;
+		this.zeitraum = new Zeitraum(von, bis);
 		this.meldeUpdate(orig.zeitraum + " -> " + zeitraum);
 	}
 
-	public void setKosten(double kosten) {
+	public void setAusgaben(double kosten) {
 		this.prepareUpdate();
-		this.kosten = kosten;
-		this.meldeUpdate("Kosten: " + orig.kosten + " -> " + kosten);
+		this.posten = new Posten(posten.getEinnahmen(), kosten,
+				typus.toString(), zeitraum.getLast());
+		this.meldeUpdate("Kosten: " + orig.getAusgaben() + " -> "
+				+ getAusgaben());
 	}
 
-	public void setUmsatz(double umsatz) {
+	public void setEinnahmen(double umsatz) {
 		this.prepareUpdate();
-		this.umsatz = umsatz;
-		this.meldeUpdate("Umsatz: " + orig.umsatz + " -> " + umsatz);
-	}
-
-	public boolean undo() {
-		if (orig == null) {
-			return false;
-		}
-
-		meldeUpdate("zurueckgesetzt auf vorige Version");
-		
-		this.typus = orig.typus;
-		this.ort = orig.ort;
-		this.zeitraum = orig.zeitraum;
-		this.kosten = orig.kosten;
-		this.umsatz = orig.umsatz;
-		this.teilnehmer = orig.teilnehmer;
-		this.orig = orig.orig;
-
-		return true;
+		this.posten = new Posten(umsatz, posten.getAusgaben(),
+				typus.toString(), zeitraum.getLast());
+		this.meldeUpdate("Umsatz: " + orig.getEinnahmen() + " -> "
+				+ getEinnahmen());
 	}
 
 	@Override
@@ -129,7 +143,7 @@ public class Termin implements Serializable {
 
 	public String toDetailString() {
 		return String.format("%s, Kosten: %,.2f, Umsatz: %,.2f", toString(),
-				kosten, umsatz);
+				posten.getAusgaben(), posten.getEinnahmen());
 	}
 
 	public static enum Typ {
@@ -137,22 +151,25 @@ public class Termin implements Serializable {
 	}
 
 	/**
-	 * Selektiert jene Termine in denen ein gegebenes Mitglied auch beteiligt ist
+	 * Selektiert jene Termine in denen ein gegebenes Mitglied auch beteiligt
+	 * ist
+	 * 
 	 * @author VHD
-	 *
+	 * 
 	 */
-	public static class TeilnehmerSelektor implements Selector<Termin>{
+	public static class TeilnehmerSelektor implements Selector<Termin> {
 		private Mitglied m;
-		public TeilnehmerSelektor(Mitglied m){
+
+		public TeilnehmerSelektor(Mitglied m) {
 			this.m = m;
 		}
-		
+
 		@Override
 		public boolean select(Termin item) {
 			return item.teilnehmer.contains(m);
 		}
 	}
-	
+
 	public static class ZeitraumSelektor implements Selector<Termin> {
 
 		private Zeitraum zeitraum;

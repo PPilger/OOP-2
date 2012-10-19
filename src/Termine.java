@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -107,10 +108,10 @@ public class Termine implements Serializable {
 		}
 	}
 
-	public void setZeitraum(Zeitraum zeitraum) {
+	public void setZeitraum(Date von, Date bis) {
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				termin.setZeitraum(zeitraum);
+				termin.setZeitraum(von, bis);
 			}
 		}
 	}
@@ -118,7 +119,7 @@ public class Termine implements Serializable {
 	public void setKosten(double kosten) {
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				termin.setKosten(kosten);
+				termin.setAusgaben(kosten);
 			}
 		}
 	}
@@ -126,7 +127,7 @@ public class Termine implements Serializable {
 	public void setUmsatz(double umsatz) {
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				termin.setUmsatz(umsatz);
+				termin.setEinnahmen(umsatz);
 			}
 		}
 	}
@@ -166,7 +167,7 @@ public class Termine implements Serializable {
 
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				gewinn += termin.getUmsatz() - termin.getKosten();
+				gewinn += termin.getEinnahmen() - termin.getAusgaben();
 			}
 		}
 
@@ -184,7 +185,7 @@ public class Termine implements Serializable {
 
 		for (Termin termin : termine) {
 			if (select(termin)) {
-				kosten += termin.getKosten();
+				kosten += termin.getAusgaben();
 			}
 		}
 

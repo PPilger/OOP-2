@@ -76,6 +76,8 @@ public class Test {
 	private static void testeTermine() {
 		Termin termin;
 		Zeitraum zeitraum;
+		Date von;
+		Date bis;
 		Band band = new Band("Green Day", "Rock", 10);
 		List<Mitglied> mitglieder = new ArrayList<Mitglied>();
 
@@ -99,46 +101,46 @@ public class Test {
 		System.out.println(mitglieder);
 
 		// Auftritte
-		zeitraum = new Zeitraum(toDate(2012, 9, 1, 18, 0), toDate(2012, 9, 2,
-				1, 0));
+		von = toDate(2012, 9, 1, 18, 0);
+		bis = toDate(2012, 9, 2, 1, 0);
 		termin = new Termin(Termin.Typ.Auftritt, new Ort("Konstanz", null),
-				zeitraum, 0, 100000, mitglieder);
+				von, bis, 0, 100000, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
-		zeitraum = new Zeitraum(toDate(2012, 8, 30, 16, 0), toDate(2012, 8, 30,
-				23, 0));
-		termin = new Termin(Termin.Typ.Auftritt, new Ort("Berlin", null),
-				zeitraum, 0, 250000, mitglieder);
+		von = toDate(2012, 8, 30, 16, 0);
+		bis = toDate(2012, 8, 30, 23, 0);
+		termin = new Termin(Termin.Typ.Auftritt, new Ort("Berlin", null), von,
+				bis, 0, 250000, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
-		zeitraum = new Zeitraum(toDate(2010, 7, 1, 17, 0), toDate(2010, 7, 1,
-				22, 0));
-		termin = new Termin(Termin.Typ.Auftritt, new Ort("Mainz", null),
-				zeitraum, 0, 80000, mitglieder);
+		von = toDate(2010, 7, 1, 17, 0);
+		bis = toDate(2010, 7, 1, 22, 0);
+		termin = new Termin(Termin.Typ.Auftritt, new Ort("Mainz", null), von,
+				bis, 0, 80000, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		// Proben
-		zeitraum = new Zeitraum(toDate(2012, 7, 1, 8, 0), toDate(2012, 7, 1,
-				15, 0));
-		termin = new Termin(Termin.Typ.Probe, new Ort("Studio", null),
-				zeitraum, 10000, 0, mitglieder);
+		von = toDate(2012, 7, 1, 8, 0);
+		bis = toDate(2012, 7, 1, 15, 0);
+		termin = new Termin(Termin.Typ.Probe, new Ort("Studio", null), von,
+				bis, 10000, 0, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
-		zeitraum = new Zeitraum(toDate(2012, 7, 20, 10, 0), toDate(2012, 7, 20,
-				20, 0));
-		termin = new Termin(Termin.Typ.Probe, new Ort("zu Hause", null),
-				zeitraum, 10, 0, mitglieder);
+		von = toDate(2012, 7, 20, 10, 0);
+		bis = toDate(2012, 7, 20, 20, 0);
+		termin = new Termin(Termin.Typ.Probe, new Ort("zu Hause", null), von,
+				bis, 10, 0, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
-		zeitraum = new Zeitraum(toDate(2010, 9, 1, 9, 0), toDate(2010, 9, 1,
-				18, 0));
-		termin = new Termin(Termin.Typ.Probe, new Ort("Stadthalle", null),
-				zeitraum, 20000, 0, mitglieder);
+		von = toDate(2010, 9, 1, 9, 0);
+		bis = toDate(2010, 9, 1, 18, 0);
+		termin = new Termin(Termin.Typ.Probe, new Ort("Stadthalle", null), von,
+				bis, 20000, 0, mitglieder);
 		band.getTermine().add(termin);
 		System.out.println("+ " + termin.toDetailString());
 
