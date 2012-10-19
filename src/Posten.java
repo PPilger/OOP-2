@@ -43,6 +43,14 @@ public class Posten implements Serializable {
 		
 	}
 	
+	public double getEinnahmen() {
+		return this.einnahmen;
+	}
+	
+	public double getAusgaben() {
+		return this.ausgaben;
+	}
+	
 	public String toString() {
 		return "["+ this.datum + ": " + this.bezeichnung + ": +" + this.einnahmen + " | -" + this.ausgaben + "]";
 	}

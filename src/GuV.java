@@ -55,6 +55,61 @@ public class GuV implements Serializable {
 		return removed;
 	}
 	
+	/**
+	 * 
+	 * @return Gibt die Summe der Einnahmen in einem selektierten Zeitraum an
+	 */
+	public double getEinnahmen() {
+		double einnahmen = 0;
+		
+		Iterator<Posten> iter = posten.iterator();
+		while(iter.hasNext()) {
+			Posten posten = iter.next();
+			if(select(posten)) {
+				einnahmen += posten.getEinnahmen();
+			}
+		}
+		
+		return einnahmen;
+	}
+	
+	/**
+	 * 
+	 * @return Gibt die Summe der Ausgaben in einem selektierten Zeitraum an
+	 */
+	public double getAusgaben() {
+		double ausgaben = 0;
+		
+		Iterator<Posten> iter = posten.iterator();
+		while(iter.hasNext()) {
+			Posten posten = iter.next();
+			if(select(posten)) {
+				ausgaben += posten.getEinnahmen();
+			}
+		}
+		
+		return ausgaben;
+	}
+	
+	/**
+	 * 
+	 * @return Gibt den Gewinn in einem selektierten Zeitraum an
+	 */
+	public double getGewinn() {
+		double gewinn = 0;
+		
+		Iterator<Posten> iter = posten.iterator();
+		while(iter.hasNext()) {
+			Posten posten = iter.next();
+			if(select(posten)) {
+				gewinn = posten.getEinnahmen() - posten.getAusgaben();
+			}
+		}
+		
+		return gewinn;
+	}
+	
+	
 	private boolean select(Posten posten) {
 		for(Selector<Posten> selector : this.selectors) {
 			if(!selector.select(posten)) {
