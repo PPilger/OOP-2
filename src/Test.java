@@ -50,8 +50,8 @@ public class Test {
 		// System.out.println("+ " + mitglied.toDetailString());
 		//
 		// prog.quit();
-		testeTermine();
-		//testeRepertoire();
+		//testeTermine();
+		testeRepertoire();
 
 		/*
 		 * System.out.println("Teste Band"); System.out.println(); testeBand();
@@ -280,6 +280,23 @@ public class Test {
 				variantenSelector));
 
 		System.out.println();
+		
+
+		System.out.println();
+		System.out.println("Repertoire: ");
+		System.out.println(band.getRepertoire());
+
+		band.getRepertoire(songSelector).remove();
+
+		System.out.println();
+		System.out.println("Repertoire nach loeschen: ");
+		System.out.println(band.getRepertoire());
+
+		band.getRepertoire().restore();
+		
+		System.out.println();
+		System.out.println("Repertoire nach wiederherstellen: ");
+		System.out.println(band.getRepertoire());
 	}
 
 	private static void testeMitglieder() {

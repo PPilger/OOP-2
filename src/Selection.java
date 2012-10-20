@@ -1,8 +1,10 @@
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Eine Selektion von Elementen. Welche Elemente sichtbar sind, wird mit
@@ -15,10 +17,12 @@ public class Selection<T> implements Iterable<T>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<T> list;
+	private List<T> removed;
 	private transient List<Selector<T>> selectors;
 
 	public Selection() {
 		this.list = new ArrayList<T>();
+		this.removed = new ArrayList<T>();
 		this.selectors = new ArrayList<Selector<T>>();
 	}
 
@@ -32,6 +36,7 @@ public class Selection<T> implements Iterable<T>, Serializable {
 	 */
 	public Selection(Selection<T> base, List<Selector<T>> selectors) {
 		this.list = base.list;
+		this.removed = base.removed;
 		this.selectors = selectors;
 		this.selectors.addAll(base.selectors);
 	}
@@ -72,6 +77,19 @@ public class Selection<T> implements Iterable<T>, Serializable {
 		}
 
 		return removed;
+	}
+
+	/**
+	 * Stellt alle selektierten, geloeschten Elemente wieder her.
+	 */
+	public void restore() {
+		Iterator<T> removedIter = removedIterator();
+
+		while (removedIter.hasNext()) {
+			T element = removedIter.next();
+			removedIter.remove();
+			list.add(element);
+		}
 	}
 
 	/**
@@ -143,51 +161,102 @@ public class Selection<T> implements Iterable<T>, Serializable {
 	/**
 	 * Erstellt einen neuen Iterator, der alle selektierten Elemente
 	 * durchlaeuft.
+	 * 
+	 * Elemente die von diesem Iterator entfernt werden, koennen mit
+	 * <code>restore</code> wiederhergestellt werden.
 	 */
 	@Override
 	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			// der Iterator ueber alle Elemente
-			Iterator<T> all = list.iterator();
+		return new SelectionIterator(list, removed);
+	}
 
-			T current = null; // das aktuelle Element
+	/**
+	 * Erstellt einen neuen Iterator, der alle selektierten, geloeschten
+	 * Elemente durchlaeuft.
+	 * 
+	 * Elemente die von diesem Iterator entfernt werden, sind nicht
+	 * wiederherstellbar!
+	 */
+	public Iterator<T> removedIterator() {
+		return new SelectionIterator(removed);
+	}
 
-			// next: das naechste selektierte Element, oder null wenn das Ende
-			// erreicht wurde
-			T next = nextSelected();
+	/**
+	 * Repraesentiert einen Iterator, der durch alle selektierten Elemente
+	 * iteriert.
+	 * 
+	 * @author Peter Pilgerstorfer
+	 * 
+	 */
+	private class SelectionIterator implements Iterator<T> {
+		private Collection<T> removed; // Collection aller entfernten Elemente
+		private ListIterator<T> sourceIter; // der Iterator ueber alle Elemente
+		private T current; // das aktuelle Element
+		private T next; // das naechste selektierte Element, bzw. null am Ende
 
-			/**
-			 * @return das naechste selektierte Element
-			 */
-			private T nextSelected() {
-				while (all.hasNext()) {
-					T next = all.next();
+		public SelectionIterator(List<T> source) {
+			this(source, null);
+		}
 
-					if (selected(next)) {
-						return next;
-					}
+		/**
+		 * @param source
+		 * @param removed
+		 *            die Collection wo entfernte Elemente gespeichert werden
+		 */
+		public SelectionIterator(List<T> source, Collection<T> removed) {
+			this.sourceIter = source.listIterator();
+			this.current = null;
+			this.next = nextSelected();
+			this.removed = removed;
+		}
+
+		/**
+		 * @return das naechste selektierte Element
+		 */
+		private T nextSelected() {
+			while (sourceIter.hasNext()) {
+				T next = sourceIter.next();
+
+				if (selected(next)) {
+					return next;
 				}
-
-				return null;
 			}
 
-			@Override
-			public boolean hasNext() {
-				return next != null;
+			return null;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return next != null;
+		}
+
+		@Override
+		public T next() {
+			current = next;
+			next = nextSelected();
+
+			return current;
+		}
+
+		@Override
+		public void remove() {
+			T previous = null;
+			
+			// Der Iterator steht schon auf der Position des naechsten
+			// Elementes. Daher muss zuerst wieder zur aktuellen Position
+			// zurueckgekehrt werden.
+			while (sourceIter.hasPrevious() && previous != current) {
+				previous = sourceIter.previous();
 			}
 
-			@Override
-			public T next() {
-				current = next;
-				next = nextSelected();
+			sourceIter.remove();
 
-				return current;
-			}
+			// Der Iterator wird wieder aufs naechste Element gesetzt
+			nextSelected();
 
-			@Override
-			public void remove() {
-				all.remove();
+			if (removed != null) {
+				removed.add(current);
 			}
-		};
+		}
 	}
 }
