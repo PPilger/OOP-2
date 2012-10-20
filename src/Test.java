@@ -105,21 +105,21 @@ public class Test {
 		bis = toDate(2012, 9, 2, 1, 0);
 		termin = new Termin(Termin.Typ.Auftritt, new Ort("Konstanz", null),
 				von, bis, 0, 100000, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		von = toDate(2012, 8, 30, 16, 0);
 		bis = toDate(2012, 8, 30, 23, 0);
 		termin = new Termin(Termin.Typ.Auftritt, new Ort("Berlin", null), von,
 				bis, 0, 250000, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		von = toDate(2010, 7, 1, 17, 0);
 		bis = toDate(2010, 7, 1, 22, 0);
 		termin = new Termin(Termin.Typ.Auftritt, new Ort("Mainz", null), von,
 				bis, 0, 80000, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		// Proben
@@ -127,21 +127,21 @@ public class Test {
 		bis = toDate(2012, 7, 1, 15, 0);
 		termin = new Termin(Termin.Typ.Probe, new Ort("Studio", null), von,
 				bis, 10000, 0, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		von = toDate(2012, 7, 20, 10, 0);
 		bis = toDate(2012, 7, 20, 20, 0);
 		termin = new Termin(Termin.Typ.Probe, new Ort("zu Hause", null), von,
 				bis, 10, 0, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		von = toDate(2010, 9, 1, 9, 0);
 		bis = toDate(2010, 9, 1, 18, 0);
 		termin = new Termin(Termin.Typ.Probe, new Ort("Stadthalle", null), von,
 				bis, 20000, 0, mitglieder);
-		band.getTermine().add(termin);
+		band.sendeTerminvorschlag(termin);
 		System.out.println("+ " + termin.toDetailString());
 
 		mitglied = mitglieder.get(0);

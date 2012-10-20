@@ -6,19 +6,23 @@ public class Terminvorschlag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Termin termin;
-	private List<Termin> target;
+	private Termine target;
 	private List<Mitglied> offen;
 
-	public Terminvorschlag(Termin termin, List<Termin> target) {
+	public Terminvorschlag(Termin termin, Termine target) {
 		this.termin = termin;
 		this.target = target;
 		this.offen = new ArrayList<Mitglied>(termin.getTeilnehmer());
 	}
 
+	public Termin getTermin() {
+		return termin;
+	}
+
 	public void accept(Mitglied mitglied) {
 		offen.remove(mitglied);
-		if (offen.isEmpty()) {
-			target.add(termin);
+		if (accepted()) {
+			target.add(this);
 		}
 	}
 
@@ -29,6 +33,10 @@ public class Terminvorschlag implements Serializable {
 				m.sende(mitglied + ": " + nachricht + " - " + termin);
 			}
 		}
+	}
+
+	public boolean accepted() {
+		return offen.isEmpty();
 	}
 
 	public String toString() {

@@ -34,6 +34,10 @@ public class Termin implements Serializable {
 		this.orig = null;
 	}
 	
+	public Zeitraum getZeitraum() {
+		return zeitraum;
+	}
+	
 	public Posten getPosten() {
 		return posten;
 	}

@@ -52,8 +52,8 @@ public class Selection<T> implements Iterable<T>, Serializable {
 	 * 
 	 * @param element
 	 */
-	public void add(T element) {
-		list.add(element);
+	public boolean add(T element) {
+		return list.add(element);
 	}
 
 	/**
