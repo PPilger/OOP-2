@@ -189,8 +189,10 @@ public class Test {
 		System.out.println("Kosten: " + selected.getKosten());
 		System.out.println();
 
-		selected.setKosten(15000);
-		band.getTermine().setUmsatz(20100);
+		for (Termin t : selected) {
+			t.setAusgaben(15000);
+			t.setEinnahmen(20100);
+		}
 
 		System.out.println("Termine " + zeitraum + " geaendert: ");
 		System.out.println(selected);
@@ -198,8 +200,10 @@ public class Test {
 		System.out.println("Kosten: " + selected.getKosten());
 		System.out.println();
 
-		selected.undo();
-		selected.undo();
+		for (Termin t : selected) {
+			t.undo();
+			t.undo();
+		}
 
 		System.out.println("Termine " + zeitraum + " undo: ");
 		System.out.println(selected);

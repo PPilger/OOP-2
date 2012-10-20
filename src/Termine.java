@@ -1,4 +1,3 @@
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,6 +25,15 @@ public class Termine extends Selection<Termin> {
 		super(base, selectors);
 	}
 
+	/**
+	 * Liefert eine Selektion der in diesem Objekt gespeicherten Termine. Mit
+	 * den uebergebenen Selektoren kann bestimmt werden, welche Termine
+	 * selektiert werden. Aenderungen in der zurueckgegebenen Selektion wirken
+	 * sich direkt auf das Original aus.
+	 * 
+	 * @param selectors
+	 * @return
+	 */
 	public Termine select(List<Selector<Termin>> selectors) {
 		return new Termine(this, selectors);
 	}
@@ -60,7 +68,7 @@ public class Termine extends Selection<Termin> {
 	}
 
 	/**
-	 * Entfernt alle selektierten Termine
+	 * Entfernt alle selektierten Termine und benachrichtigt alle Teilnehmer.
 	 * 
 	 * @return die Anzahl der entfernten Termine
 	 */
@@ -81,36 +89,6 @@ public class Termine extends Selection<Termin> {
 		}
 
 		return removed;
-	}
-
-	public void setOrt(Ort ort) {
-		for (Termin termin : this) {
-			termin.setOrt(ort);
-		}
-	}
-
-	public void setZeitraum(Date von, Date bis) {
-		for (Termin termin : this) {
-			termin.setZeitraum(von, bis);
-		}
-	}
-
-	public void setKosten(double kosten) {
-		for (Termin termin : this) {
-			termin.setAusgaben(kosten);
-		}
-	}
-
-	public void setUmsatz(double umsatz) {
-		for (Termin termin : this) {
-			termin.setEinnahmen(umsatz);
-		}
-	}
-
-	public void undo() {
-		for (Termin termin : this) {
-			termin.undo();
-		}
 	}
 
 	/**

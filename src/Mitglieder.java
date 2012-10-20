@@ -1,7 +1,3 @@
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,15 +6,10 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Mitglieder implements Serializable {
+public class Mitglieder extends Selection<Mitglied> {
 	private static final long serialVersionUID = 1L;
-	
-	private List<Mitglied> mitglieder;
-	private transient List<Selector<Mitglied>> selectors;
 
 	public Mitglieder() {
-		this.mitglieder = new ArrayList<Mitglied>();
-		this.selectors = new ArrayList<Selector<Mitglied>>();
 	}
 
 	/**
@@ -29,85 +20,20 @@ public class Mitglieder implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Mitglieder(Mitglieder base, List<Selector<Mitglied>> selectors) {
-		this.mitglieder = base.mitglieder;
-		this.selectors = selectors;
-		this.selectors.addAll(base.selectors);
+	private Mitglieder(Mitglieder base, List<Selector<Mitglied>> selectors) {
+		super(base, selectors);
 	}
 
 	/**
-	 * Fuegt eine neues Mitglied hinzu.
+	 * Liefert eine Selektion der in diesem Objekt gespeicherten Mitglieder. Mit
+	 * den uebergebenen Selektoren kann bestimmt werden, welche Mitglieder
+	 * selektiert werden. Aenderungen in der zurueckgegebenen Selektion wirken
+	 * sich direkt auf das Original aus.
 	 * 
-	 * @param mitglied
-	 *            das neue Mitglied
+	 * @param selectors
+	 * @return
 	 */
-	public void add(Mitglied mitglied) {
-		mitglieder.add(mitglied);
-	}
-
-	/**
-	 * Entfernt alle selektierten Mitglieder.
-	 * 
-	 * @return die Anzahl der entfernten Mitglieder
-	 */
-	public int remove() {
-		int removed = 0;
-
-		Iterator<Mitglied> iter = mitglieder.iterator();
-		while (iter.hasNext()) {
-			Mitglied mitglied = iter.next();
-			if (select(mitglied)) {
-				iter.remove();
-				removed++;
-			}
-		}
-
-		return removed;
-	}
-
-	/**
-	 * @param mitglied
-	 * @return true, wenn alle Selektoren das Mitglied selektieren, false
-	 *         anderenfalls.
-	 */
-	private boolean select(Mitglied mitglied) {
-		for (Selector<Mitglied> selector : selectors) {
-			if (!selector.select(mitglied)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append('[');
-		
-		Iterator<Mitglied> iter = mitglieder.iterator();
-		while(iter.hasNext()) {
-			Mitglied mitglied = iter.next();
-			if (select(mitglied)) {
-				builder.append(mitglied);
-				break;
-			}
-		}
-		while (iter.hasNext()) {
-			Mitglied mitglied = iter.next();
-			if (select(mitglied)) {
-				builder.append(", ");
-				builder.append(mitglied);
-			}
-		}
-		
-		builder.append(']');
-		
-		return builder.toString();
-	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		selectors = new ArrayList<Selector<Mitglied>>();
+	public Mitglieder select(List<Selector<Mitglied>> selectors) {
+		return new Mitglieder(this, selectors);
 	}
 }

@@ -1,7 +1,4 @@
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,15 +7,10 @@ import java.util.List;
  * @author Peter Pilgerstorfer
  * 
  */
-public class Songs implements Serializable {
+public class Songs extends Selection<Song> {
 	private static final long serialVersionUID = 1L;
-	
-	List<Song> songs;
-	List<Selector<Song>> selectors;
 
 	public Songs() {
-		this.songs = new ArrayList<Song>();
-		this.selectors = new ArrayList<Selector<Song>>();
 	}
 
 	/**
@@ -29,74 +21,39 @@ public class Songs implements Serializable {
 	 * @param base
 	 * @param selectors
 	 */
-	public Songs(Songs base, List<Selector<Song>> selectors) {
-		this.songs = base.songs;
-		this.selectors = selectors;
-		this.selectors.addAll(base.selectors);
+	private Songs(Songs base, List<Selector<Song>> selectors) {
+		super(base, selectors);
 	}
 
 	/**
-	 * Fuegt einen neuen Song hinzu.
+	 * Liefert eine Selektion der in diesem Objekt gespeicherten Songs. Mit den
+	 * uebergebenen Selektoren kann bestimmt werden, welche Songs selektiert
+	 * werden. Aenderungen in der zurueckgegebenen Selektion wirken sich direkt
+	 * auf das Original aus.
 	 * 
-	 * @param song
-	 *            der neue Song
+	 * @param selectors
+	 * @return
 	 */
-	public void add(Song song) {
-		songs.add(song);
+	public Songs select(List<Selector<Song>> selectors) {
+		return new Songs(this, selectors);
 	}
 
-	/**
-	 * Entfernt alle selektierten Songs aus der Sammlung
-	 * 
-	 * @return die Anzahl der entfernten Songs
-	 */
-	public int remove() {
-		int removed = 0;
-
-		Iterator<Song> iter = songs.iterator();
-		while (iter.hasNext()) {
-			Song song = iter.next();
-			if (select(song)) {
-				iter.remove();
-				removed++;
-			}
-		}
-
-		return removed;
-	}
-	
 	public List<SongVariante> getSongVarianten() {
 		return getSongVarianten(new ArrayList<Selector<Variante>>());
 	}
-	
-	public List<SongVariante> getSongVarianten(List<Selector<Variante>> selectors) {
+
+	public List<SongVariante> getSongVarianten(
+			List<Selector<Variante>> selectors) {
 		List<SongVariante> songVarianten = new ArrayList<SongVariante>();
-		for(Song song : songs) {
-			if(select(song)) {
-				for(Variante variante : song.getVarianten()) {
-					if(select(variante, selectors)) {
-						songVarianten.add(new SongVariante(song, variante));
-					}
+		for (Song song : this) {
+			for (Variante variante : song.getVarianten()) {
+				if (select(variante, selectors)) {
+					songVarianten.add(new SongVariante(song, variante));
 				}
 			}
 		}
 		return songVarianten;
 	}
-
-	/**
-	 * @param song
-	 * @return true, wenn alle Selektoren den Song selektieren, false
-	 *         anderenfalls.
-	 */
-	private boolean select(Song song) {
-		for (Selector<Song> selector : selectors) {
-			if (!selector.select(song)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 
 	/**
 	 * @param variante
@@ -110,37 +67,5 @@ public class Songs implements Serializable {
 			}
 		}
 		return true;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append('[');
-		
-		Iterator<Song> iter = songs.iterator();
-		while(iter.hasNext()) {
-			Song song = iter.next();
-			if (select(song)) {
-				builder.append(song);
-				break;
-			}
-		}
-		while (iter.hasNext()) {
-			Song song = iter.next();
-			if (select(song)) {
-				builder.append(", ");
-				builder.append(song);
-			}
-		}
-		
-		builder.append(']');
-		
-		return builder.toString();
-	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		selectors = new ArrayList<Selector<Song>>();
 	}
 }

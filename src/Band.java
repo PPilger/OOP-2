@@ -41,7 +41,7 @@ public class Band implements Serializable {
 	}
 
 	public Songs getRepertoire(List<Selector<Song>> selectors) {
-		return new Songs(repertoire, selectors);
+		return this.repertoire.select(selectors);
 	}
 
 	public Termine getTermine() {
@@ -57,7 +57,7 @@ public class Band implements Serializable {
 	}
 
 	public Mitglieder getMitglieder(List<Selector<Mitglied>> selectors) {
-		return new Mitglieder(mitglieder, selectors);
+		return this.mitglieder.select(selectors);
 	}
 
 	/**
@@ -86,13 +86,13 @@ public class Band implements Serializable {
 			Date von;
 			Date bis = termin.getZeitraum().getFirst();
 			Zeitraum einJahr;
-			
+
 			calender.setTime(bis);
 			calender.add(Calendar.YEAR, -1);
 			von = calender.getTime();
-			
+
 			einJahr = new Zeitraum(von, bis);
-			
+
 			for (Mitglied teilnehmer : termin.getTeilnehmer()) {
 				if (ersatzmitglieder.select(teilnehmer)) {
 					List<Selector<Termin>> selectors = new ArrayList<Selector<Termin>>();
