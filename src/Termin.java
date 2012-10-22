@@ -57,7 +57,10 @@ public class Termin implements Serializable {
 		return teilnehmer;
 	}
 
-	public void prepareUpdate() {
+	/**
+	 * Legt eine Kopie des Termins auf den Undo-Stack.
+	 */
+	private void prepareUpdate() {
 		Termin other = new Termin();
 		other.typus = typus;
 
@@ -95,7 +98,11 @@ public class Termin implements Serializable {
 		return true;
 	}
 
-	public void meldeUpdate(String aenderung) {
+	/**
+	 * Benachrichtigt alle Teilnehmer ueber die gemachte Aenderung.
+	 * @param aenderung
+	 */
+	private void meldeUpdate(String aenderung) {
 		for (Mitglied t : teilnehmer) {
 			t.sende(orig + " wurde geaendert: " + aenderung);
 		}
