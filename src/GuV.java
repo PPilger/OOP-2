@@ -1,3 +1,5 @@
+import java.util.List;
+
 
 /**
  * 
@@ -16,6 +18,32 @@ public class GuV extends Selection<Posten> {
 
 	public GuV(Band band) {
 		this.band = band;
+	}
+
+	/**
+	 * Erstelle eine neue Termin Sammlung die auf den selben Daten wie
+	 * <code>base</code> arbeitet. Es sind jedoch nur Elemente sichtbar, die von
+	 * den Selektoren selektiert werden.
+	 * 
+	 * @param base
+	 * @param selectors
+	 */
+	private GuV(Band band, GuV base, List<Selector<Posten>> selectors) {
+		super(base, selectors);
+		this.band = band;
+	}
+
+	/**
+	 * Liefert eine Selektion der in diesem Objekt gespeicherten Posten. Mit
+	 * den uebergebenen Selektoren kann bestimmt werden, welche Posten
+	 * selektiert werden. Aenderungen in der zurueckgegebenen Selektion wirken
+	 * sich direkt auf das Original aus.
+	 * 
+	 * @param selectors
+	 * @return
+	 */
+	public GuV select(List<Selector<Posten>> selectors) {
+		return new GuV(band, this, selectors);
 	}
 
 	/**

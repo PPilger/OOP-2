@@ -20,6 +20,8 @@ public class Band implements Serializable {
 	private Songs repertoire;
 	private Termine termine;
 	private Mitglieder mitglieder;
+	private Orte orte;
+	private GuV guv;
 
 	// Konstruktor
 	public Band(String name, String ausrichtung, int minProben) {
@@ -30,6 +32,8 @@ public class Band implements Serializable {
 		this.repertoire = new Songs();
 		this.termine = new Termine();
 		this.mitglieder = new Mitglieder();
+		this.orte = new Orte();
+		this.guv = new GuV(this);
 	}
 
 	public String getName() {
@@ -58,6 +62,22 @@ public class Band implements Serializable {
 
 	public Mitglieder getMitglieder(List<Selector<Mitglied>> selectors) {
 		return this.mitglieder.select(selectors);
+	}
+	
+	public Orte getOrte() {
+		return this.orte;
+	}
+
+	public Orte getOrte(List<Selector<Ort>> selectors) {
+		return this.orte.select(selectors);
+	}
+	
+	public GuV getGuV() {
+		return this.guv;
+	}
+
+	public GuV getGuV(List<Selector<Posten>> selectors) {
+		return this.guv.select(selectors);
 	}
 
 	/**
