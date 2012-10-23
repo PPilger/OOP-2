@@ -11,31 +11,50 @@ public class Programm {
 	private File file;
 	private List<Band> bands;
 
+	/**
+	 * Erzeugt ein neues Programm und laedt den letzten Zustand aus der Sicherungsdatei.
+	 */
 	public Programm() {
+		this(true);
+	}
+
+	/**
+	 * Erzeugt ein neues Programm
+	 * @param load true, wenn der letzte Zustand aus der Sicherung geladen werden soll.
+	 */
+	public Programm(boolean load) {
 		String filename = "bands.dat";
 		file = new File(filename);
-		if (file.exists()) {
-			read();
-		}
+		
+		if (load) {
+			if (file.exists()) {
+				read();
+			}
 
-		if (this.bands == null) {
+			if (this.bands == null) {
+				this.bands = new ArrayList<Band>();
+			}
+		} else {
 			this.bands = new ArrayList<Band>();
 		}
 	}
-	
+
 	public void addBand(Band band) {
 		bands.add(band);
 	}
-	
+
 	public Band getBand(String name) {
-		for(Band band : bands) {
-			if(band.getName().equalsIgnoreCase(name)) {
+		for (Band band : bands) {
+			if (band.getName().equalsIgnoreCase(name)) {
 				return band;
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * Speichert den aktuellen Programmzustand.
+	 */
 	public void quit() {
 		ObjectOutputStream dos = null;
 		try {

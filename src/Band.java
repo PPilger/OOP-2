@@ -44,12 +44,24 @@ public class Band implements Serializable {
 		return this.repertoire;
 	}
 
+	public Songs getRepertoire(Selector<Song> selector) {
+		List<Selector<Song>> list = new ArrayList<Selector<Song>>();
+		list.add(selector);
+		return getRepertoire(list);
+	}
+
 	public Songs getRepertoire(List<Selector<Song>> selectors) {
 		return this.repertoire.select(selectors);
 	}
 
 	public Termine getTermine() {
 		return this.termine;
+	}
+
+	public Termine getTermine(Selector<Termin> selector) {
+		List<Selector<Termin>> list = new ArrayList<Selector<Termin>>();
+		list.add(selector);
+		return getTermine(list);
 	}
 
 	public Termine getTermine(List<Selector<Termin>> selectors) {
@@ -60,6 +72,12 @@ public class Band implements Serializable {
 		return this.mitglieder;
 	}
 
+	public Mitglieder getMitglieder(Selector<Mitglied> selector) {
+		List<Selector<Mitglied>> list = new ArrayList<Selector<Mitglied>>();
+		list.add(selector);
+		return getMitglieder(list);
+	}
+
 	public Mitglieder getMitglieder(List<Selector<Mitglied>> selectors) {
 		return this.mitglieder.select(selectors);
 	}
@@ -68,12 +86,24 @@ public class Band implements Serializable {
 		return this.orte;
 	}
 
+	public Orte getOrte(Selector<Ort> selector) {
+		List<Selector<Ort>> list = new ArrayList<Selector<Ort>>();
+		list.add(selector);
+		return getOrte(list);
+	}
+
 	public Orte getOrte(List<Selector<Ort>> selectors) {
 		return this.orte.select(selectors);
 	}
 	
 	public GuV getGuV() {
 		return this.guv;
+	}
+
+	public GuV getGuV(Selector<Posten> selector) {
+		List<Selector<Posten>> list = new ArrayList<Selector<Posten>>();
+		list.add(selector);
+		return getGuV(list);
 	}
 
 	public GuV getGuV(List<Selector<Posten>> selectors) {

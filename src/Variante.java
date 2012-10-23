@@ -18,7 +18,7 @@ public class Variante implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("%s, %d:%02d", bezeichnung, laenge / 60,
+		return String.format("%s: %d:%02d", bezeichnung, laenge / 60,
 				laenge % 60);
 	}
 

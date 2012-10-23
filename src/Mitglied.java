@@ -58,6 +58,10 @@ public class Mitglied implements Serializable {
 	public Queue<Terminvorschlag> getTerminvorschlaege() {
 		return terminvorschlaege;
 	}
+	
+	public void setErsatzmitglied(boolean ersatzmitglied) {
+		this.ersatzmitglied = ersatzmitglied;
+	}
 
 	public String toString() {
 		return this.name;
@@ -65,7 +69,7 @@ public class Mitglied implements Serializable {
 
 	public String toDetailString() {
 		return toString() + " (" + this.instrument + ") " + this.zeitraum
-				+ "\n" + "TelefonNr: " + this.telNr;
+				+ "\n" + "TelefonNr: " + this.telNr + (ersatzmitglied ? ", Ersatzmitglied" : "");
 	}
 
 	/**
@@ -139,16 +143,21 @@ public class Mitglied implements Serializable {
 	 * 
 	 */
 	public static class NameSelektor implements Selector<Mitglied> {
+		private String[] namen;
 
-		private String name;
-
-		public NameSelektor(String name) {
-			this.name = name;
+		public NameSelektor(String... namen) {
+			this.namen = namen;
 		}
 
 		@Override
 		public boolean select(Mitglied item) {
-			return item.name.compareToIgnoreCase(name) == 0;
+			for(String name : namen) {
+				if(name.equalsIgnoreCase(item.name)) {
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -55,7 +54,6 @@ public class Posten implements Serializable {
 	}
 
 	public String toString() {
-		String datum = DateFormat.getDateInstance().format(this.datum);
 		String gewinn = String.format("%+,.2f", (einnahmen - ausgaben));
 		return this.bezeichnung + ": " + gewinn;
 	}

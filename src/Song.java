@@ -30,7 +30,7 @@ public class Song implements Serializable {
 	}
 
 	public String toDetailString() {
-		return toString() + " " + zeitraum;
+		return toString() + " " + zeitraum + " " + varianten;
 	}
 
 	/**
