@@ -1,21 +1,21 @@
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Ort implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String bezeichnung;
-	private ArrayList<String> infrastruktur;
+	private List<String> infrastruktur;
 
 	public String toString() {
 		return bezeichnung;
 	}
 
 	public String toDetailString() {
-		return "Bezeichnung: " + bezeichnung + " " + infrastruktur.toString();
+		return bezeichnung + " " + infrastruktur.toString();
 	}
 
-	public Ort(String bezeichnung, ArrayList<String> infrastruktur) {
+	public Ort(String bezeichnung, List<String> infrastruktur) {
 		this.bezeichnung = bezeichnung;
 		this.infrastruktur = infrastruktur;
 	}
