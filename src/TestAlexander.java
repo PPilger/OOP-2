@@ -135,5 +135,23 @@ public class TestAlexander {
 		//Küniglberg restore
 		System.out.println("Restore:"+ mb.getOrte(kueb).toString() + "Anzahl: ?");mb.getOrte(kueb).restore();
 		System.out.println(mb.getOrte().toString());
+		
+		//Testen von varianten
+		ArrayList<Variante> stdVar = new ArrayList<Variante>(); stdVar.add(new Variante("Radio", 6000));stdVar.add(new Variante("Maxi", 4500));stdVar.add(new Variante("Single", 3600));
+		ArrayList<Variante> hzlVar = new ArrayList<Variante>(); hzlVar.add(new Variante("Heinzl-Edition", 6000));hzlVar.add(new Variante("ORF-Version", 4500));hzlVar.add(new Variante("Unplugged", 3600));
+		mb.getRepertoire().add(new Song("Ghetto",new Zeitraum(toDate(1990, 1, 1),toDate(2000, 1, 1)),stdVar));
+		mb.getRepertoire().add(new Song("Strassenjunge",new Zeitraum(toDate(1998, 1, 10), toDate(2002, 1, 1)),stdVar));
+		mb.getRepertoire().add(new Song("Augen auf",new Zeitraum(toDate(2012, 10, 1),toDate(2012, 12, 31)),hzlVar));
+		mb.getRepertoire().add(new Song("Endstation",new Zeitraum(toDate(2012, 10, 1),toDate(2012, 12, 31)),hzlVar));
+		mb.getRepertoire().add(new Song("Auf die Fresse",new Zeitraum(toDate(2012, 10, 20),toDate(2012, 12, 31)),stdVar));
+		System.out.println("Das gesamte Repertoire ist: " + mb.getRepertoire().toString() +
+				"\nMit folgende Varianten: " + mb.getRepertoire().getSongVarianten().toString());
+		ArrayList<Selector<Song>> songs12 = new ArrayList<Selector<Song>>(); songs12.add(new Song.ZeitpunktSelektor(toDate(2012, 12, 5)));
+		System.out.println("Das Repertoire 2012 ist: " + mb.getRepertoire(songs12).toString() +
+				"\nMit folgende Varianten: " + mb.getRepertoire().getSongVarianten().toString());
+		ArrayList<Selector<Variante>> varis = new ArrayList<Selector<Variante>>(); varis.add(new Variante.BezeichnungSelektor("Heinzl-Edition"));
+		List<SongVariante> lil = mb.getRepertoire().getSongVarianten(varis);
+		System.out.println("Das Repertoire 2012 ist: " + mb.getRepertoire(songs12).toString() +
+				"\nMit folgenden Heinzl Varianten: " + lil.toString());		
 	}
 }
