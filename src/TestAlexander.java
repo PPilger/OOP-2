@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,8 +21,10 @@ public class TestAlexander {
 	}
 
 	public static void main(String[] args) {
-		Programm prog = new Programm();
+		Programm prog = new Programm();//true);
 
+		//System.out.println(prog.getBand("Sido").toString());
+		
 		prog.addBand(new Band("Sido", "Berlin-Rap", 4));
 		Band mb = prog.getBand("Sido");
 		mb.getMitglieder().add(new Mitglied("Sido","12345","Gesang",new Zeitraum(toDate(1999, 5, 10)),false));
@@ -54,10 +57,11 @@ public class TestAlexander {
 		Termin t = new Termin(Termin.Typ.Auftritt , mb.getOrte(mOrt).getFirst(),
 				toDate(2012,4,1),toDate(2012,4,1),2500.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());		
 		//Teminvorschlag schlaegt fehl, da ersatzmitglieder noch keine proben haben
-		System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
+		System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t)+
+				"\nErsatzmitglieder haben noch keine Proben");
 		
 		//TErminvorschlag sollte nicht fehlschlagen, Probe mit regulaeren Mitglieder
-		t = new Termin(Termin.Typ.Probe , mb.getOrte(mOrt).getFirst(),
+		t = new Termin(Termin.Typ.Auftritt , mb.getOrte(mOrt).getFirst(),
 				toDate(2012,4,1),toDate(2012,4,1),2500.99,.0,(ArrayList<Mitglied>) mb.getMitglieder(regM).asList());
 		mb.sendeTerminvorschlag(t);
 		for(Mitglied m : mb.getMitglieder())
@@ -90,7 +94,7 @@ public class TestAlexander {
 		
 		//restore den einen termin in wr stadthalle
 		Termine mT = mb.getTermine();
-		ArrayList<Selector<Termin>> ts = new ArrayList<Selector<Termin>>();ts.add(new Termin.TypSelektor(Termin.Typ.Probe));
+		ArrayList<Selector<Termin>> ts = new ArrayList<Selector<Termin>>();ts.add(new Termin.TypSelektor(Termin.Typ.Auftritt));
 		mT.select(ts);
 		mT.restore();
 		for(Mitglied m : mb.getMitglieder(regM))
@@ -103,20 +107,27 @@ public class TestAlexander {
 		
 		//erstelle fuenf Proben die von allen akzeptiert werden
 				t = new Termin(Termin.Typ.Probe , mb.getOrte(mOrt).getFirst(),
-						toDate(2012,6,16),toDate(2012,6,16),2600.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
+						toDate(2012,6,15),toDate(2012,6,16),2600.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
 				t = new Termin(Termin.Typ.Probe , mb.getOrte().getFirst(),
-						toDate(2012,6,7),toDate(2012,6,7),2600.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
+						toDate(2012,6,6),toDate(2012,6,7),2600.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
 				t = new Termin(Termin.Typ.Probe , mb.getOrte(mOrt).getFirst(),
-						toDate(2012,6,8),toDate(2012,6,8),2700.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
+						toDate(2012,6,7),toDate(2012,6,8),2700.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
 				t = new Termin(Termin.Typ.Probe , mb.getOrte().getFirst(),
-						toDate(2012,6,9),toDate(2012,6,9),2800.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
+						toDate(2012,6,8),toDate(2012,6,9),2800.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
 				t = new Termin(Termin.Typ.Probe , mb.getOrte(mOrt).getFirst(),
-						toDate(2012,6,10),toDate(2012,6,10),2900.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
+						toDate(2012,6,9),toDate(2012,6,10),2900.99,.0,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Termin erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
+				
+				for(Mitglied m : mb.getMitglieder())
+				{
+					Terminvorschlag tv = m.getTerminvorschlaege().poll();
+					while(tv != null){
+						tv.accept(m); tv = m.getTerminvorschlaege().poll();}
+				}
 				t = new Termin(Termin.Typ.Auftritt , mb.getOrte(mOrt).getFirst(),
 						toDate(2012,7,20),toDate(2012,7,20),17999.98,57025.11,(ArrayList<Mitglied>) mb.getMitglieder().asList());
 				System.out.println("Auftritt erstellen erfolgreich = " + mb.sendeTerminvorschlag(t));
@@ -126,7 +137,6 @@ public class TestAlexander {
 					while(tv != null){
 						tv.accept(m); tv = m.getTerminvorschlaege().poll();}
 				}
-		
 		
 				
 		//Alle Termine sollten akzeptiert sein
@@ -152,6 +162,7 @@ public class TestAlexander {
 		ArrayList<Selector<Variante>> varis = new ArrayList<Selector<Variante>>(); varis.add(new Variante.BezeichnungSelektor("Heinzl-Edition"));
 		List<SongVariante> lil = mb.getRepertoire().getSongVarianten(varis);
 		System.out.println("Das Repertoire 2012 ist: " + mb.getRepertoire(songs12).toString() +
-				"\nMit folgenden Heinzl Varianten: " + lil.toString());		
+				"\nMit folgenden Heinzl Varianten: " + lil.toString());	
+		//prog.quit();
 	}
 }
