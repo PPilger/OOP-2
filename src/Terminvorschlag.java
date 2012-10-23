@@ -30,7 +30,9 @@ public class Terminvorschlag implements Serializable {
 		if (termin.getTeilnehmer().contains(mitglied)) {
 			for (Mitglied m : termin.getTeilnehmer()) {
 				m.revidiere(this);
-				m.sende(mitglied + ": " + nachricht + " - " + termin);
+				if(m != mitglied) {
+					m.sende(mitglied + ": " + nachricht + " - " + termin);
+				}
 			}
 		}
 	}
