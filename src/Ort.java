@@ -62,7 +62,7 @@ public class Ort implements Serializable {
 		@Override
 		public boolean select(Ort item) {
 			if (enthaelt) {
-				// kommt der String nicht vor, wird -1 zurückgegeben
+				// kommt der String nicht vor, wird -1 zurueckgegeben
 				return item.bezeichnung.indexOf(name) != -1;
 			} else {
 				return item.bezeichnung.equalsIgnoreCase(name);

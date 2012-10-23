@@ -83,8 +83,8 @@ public class Mitglied implements Serializable {
 		private boolean isE;
 
 		/**
-		 * Vergleicht den im Parameter übergebenen Wert mit dem boolschen Wert
-		 * für Ersatzmitglied.
+		 * Vergleicht den im Parameter uebergebenen Wert mit dem boolschen Wert
+		 * fuer Ersatzmitglied.
 		 * 
 		 * @param isErsatzmitglied
 		 *            True gibt nur Ersatzmitglieder zurueck, False hingegen nur
@@ -102,7 +102,7 @@ public class Mitglied implements Serializable {
 
 	/**
 	 * 
-	 * @author Kögler Alexander
+	 * @author Koegler Alexander
 	 * 
 	 */
 	public static class ZeitraumSelektor implements Selector<Mitglied> {
@@ -121,7 +121,7 @@ public class Mitglied implements Serializable {
 
 	/**
 	 * 
-	 * @author Kögler Alexander
+	 * @author Koegler Alexander
 	 * 
 	 */
 	public static class InstrumentSelektor implements Selector<Mitglied> {
@@ -139,7 +139,7 @@ public class Mitglied implements Serializable {
 
 	/**
 	 * 
-	 * @author Kögler Alexander
+	 * @author Koegler Alexander
 	 * 
 	 */
 	public static class NameSelektor implements Selector<Mitglied> {

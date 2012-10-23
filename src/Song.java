@@ -35,7 +35,7 @@ public class Song implements Serializable {
 
 	/**
 	 * 
-	 * @author Kögler Alexander
+	 * @author Koegler Alexander
 	 * 
 	 */
 	public static class ZeitpunktSelektor implements Selector<Song> {
@@ -54,7 +54,7 @@ public class Song implements Serializable {
 
 	/**
 	 * 
-	 * @author Kögler Alexander
+	 * @author Koegler Alexander
 	 * 
 	 */
 	public static class NameSelektor implements Selector<Song> {
