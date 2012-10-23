@@ -53,6 +53,19 @@ public class Selection<T> implements Iterable<T>, Serializable {
 	}
 
 	/**
+	 * @return die aktuelle Selektion als Liste.
+	 */
+	public List<T> asList() {
+		List<T> list = new ArrayList<T>();
+
+		for (T element : this) {
+			list.add(element);
+		}
+
+		return list;
+	}
+
+	/**
 	 * Fuegt ein Element zur Liste hinzu.
 	 * 
 	 * @param element
@@ -241,7 +254,7 @@ public class Selection<T> implements Iterable<T>, Serializable {
 		@Override
 		public void remove() {
 			T previous = null;
-			
+
 			// Der Iterator steht schon auf der Position des naechsten
 			// Elementes. Daher muss zuerst wieder zur aktuellen Position
 			// zurueckgekehrt werden.
