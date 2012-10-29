@@ -20,7 +20,7 @@ public class Song implements Serializable {
 		this.zeitraum = zeitraum;
 		this.varianten = varianten;
 	}
-	
+
 	public List<Variante> getVarianten() {
 		return varianten;
 	}
@@ -68,6 +68,25 @@ public class Song implements Serializable {
 		@Override
 		public boolean select(Song item) {
 			return item.name.compareToIgnoreCase(name) == 0;
+		}
+	}
+
+	/**
+	 * Selektiert alle Songs, die bei einem Termin zur verfuegung stehen.
+	 * 
+	 * @author Peter Pilgerstorfer
+	 * 
+	 */
+	public static class TerminSelector implements Selector<Song> {
+		private Termin termin;
+
+		public TerminSelector(Termin termin) {
+			this.termin = termin;
+		}
+
+		@Override
+		public boolean select(Song item) {
+			return item.zeitraum.enthaelt(termin.getZeitraum());
 		}
 	}
 }

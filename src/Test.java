@@ -952,6 +952,20 @@ public class Test {
 		// [Holiday (Acoustic, 3:30), American Idiot (Acoustic, 3:20)]
 		System.out.println(band.getRepertoire(songSelector).getSongVarianten(
 				variantenSelector));
+
+		// Testfall: Zeige das Repertoire zu einem Termin am 2.3.2012
+		//
+		// Erwartete Ausgabe:
+		// Repertoire zum Termin
+		// "Auftritt: St. Poelten [02.03.2012 08:00 - 02.03.2012 11:00]":
+		// [Holiday, American Idiot]
+		Date von = toDate(2012, 3, 2, 20, 0);
+		Date bis = toDate(2012, 3, 2, 23, 0);
+		Termin termin = new Termin(Termin.Typ.Auftritt, band.getOrte()
+				.getFirst(), von, bis, 1000, 10000, new ArrayList<Mitglied>());
+		System.out.println();
+		System.out.println("Repertoire zum Termin \"" + termin + "\":");
+		System.out.println(band.getRepertoire(new Song.TerminSelector(termin)));
 	}
 
 	public static void testeSicherung(Band band) {
